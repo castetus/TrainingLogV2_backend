@@ -18,3 +18,7 @@ export type Workout = {
 export type GetWorkoutByIdParams = {
   id: string;
 }
+
+export type CreateWorkoutRequest = Pick<Workout, 'trainingId'>;
+
+export type UpdateWorkoutRequest = Partial<Pick<Workout, 'status' | 'continuation'>>;

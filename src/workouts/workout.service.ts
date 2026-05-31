@@ -1,4 +1,5 @@
-import { Workout } from "./workouts.types";
+import { Workout, CreateWorkoutRequest, WorkoutStatus } from './workouts.types';
+import crypto from 'node:crypto';
 
 const workouts: Workout[] = [];
 
@@ -6,9 +7,20 @@ const getAllWorkouts = (): Workout[] => {
   return workouts;
 };
 
-const createWorkout = (workout: Workout): Workout => {
-  workouts.push(workout);
-  return workout;
+const createWorkout = (data: CreateWorkoutRequest): Workout => {
+
+  const newWorkout: Workout = {
+    id: crypto.randomUUID(),
+    name: 'New Workout',
+    date: new Date().toISOString(),
+    trainingId: data.trainingId,
+    userId: 'user123',
+    status: WorkoutStatus.IN_PROGRESS,
+    continuation: 0,
+  };
+
+  workouts.unshift(newWorkout);
+  return newWorkout;
 };
 
 const getWorkoutById = (id: string): Workout | undefined => {
