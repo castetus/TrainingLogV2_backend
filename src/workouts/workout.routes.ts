@@ -8,16 +8,17 @@ import {
  } from './workouts.controller';
 import { createWorkoutDto } from './dto/create-workout.dto';
 import { updateWorkoutDto } from './dto/update-workout.dto';
+import { getWorkoutByIdDto } from './dto/get-workout.dto';
 
 
 export function workoutRoutes (app: FastifyInstance) {
-  app.get('/workouts', getAllWorkouts);
+  app.get('/workouts', { schema: getWorkoutByIdDto }, getAllWorkouts);
 
   app.post('/workouts', { schema: createWorkoutDto }, createWorkout);
 
-  app.get('/workouts/:id', getWorkoutById);
+  app.get('/workouts/:id', { schema: getWorkoutByIdDto }, getWorkoutById);
 
   app.patch('/workouts/:id', { schema: updateWorkoutDto }, updateWorkout);
 
-  app.delete('/workouts/:id', deleteWorkout);
+  app.delete('/workouts/:id', { schema: getWorkoutByIdDto }, deleteWorkout);
 };

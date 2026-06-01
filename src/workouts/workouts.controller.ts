@@ -1,14 +1,21 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { CreateWorkoutRequest, GetWorkoutByIdParams, UpdateWorkoutRequest } from './workouts.types';
+import { CreateWorkoutRequest, GetWorkoutByIdParams, UpdateWorkoutRequest, Workout } from './workouts.types';
 import { workoutService } from './workout.service';
+import type { ApiResponse } from '../shared/types';
 
 export const getAllWorkouts = (req: FastifyRequest, res: FastifyReply) => {
   const workouts = workoutService.getAllWorkouts();
-  return res.send(workouts);
+  const response: ApiResponse<Workout[], { total: number }> = {
+    data: workouts,
+    meta: {
+      total: workouts.length,
+    }
+  }
+  return res.send(response);
 };
 
 export const createWorkout = (req: FastifyRequest<{ Body: CreateWorkoutRequest }>, res: FastifyReply) => {
-  return res.send(workoutService.createWorkout(req.body));
+  return res.send({ data: workoutService.createWorkout(req.body) });
 };
 
 export const getWorkoutById = (req: FastifyRequest<{ Params: GetWorkoutByIdParams }>, res: FastifyReply) => {
@@ -17,10 +24,14 @@ export const getWorkoutById = (req: FastifyRequest<{ Params: GetWorkoutByIdParam
 
 
   if (!workout) {
-    return res.status(404).send({ message: 'Workout not found' });
+    return res.status(404).send({ data: 'Workout not found' });
   }
 
-  return res.send(workout);
+  const response: ApiResponse<Workout> = {
+    data: workout,
+  }
+
+  return res.send(response);
 };
 
 export const updateWorkout = (req: FastifyRequest<{ Params: GetWorkoutByIdParams, Body: UpdateWorkoutRequest }>, res: FastifyReply) => {
@@ -28,10 +39,14 @@ export const updateWorkout = (req: FastifyRequest<{ Params: GetWorkoutByIdParams
   const updatedWorkout = workoutService.updateWorkout(id, req.body);
 
   if (!updatedWorkout) {
-    return res.status(404).send({ message: 'Workout not found' });
+    return res.status(404).send({ data: 'Workout not found' });
   }
 
-  return res.send(updatedWorkout);
+  const response: ApiResponse<Workout> = {
+    data: updatedWorkout,
+  }
+
+  return res.send(response);
 };
 
 export const deleteWorkout = (req: FastifyRequest<{ Params: GetWorkoutByIdParams }>, res: FastifyReply) => {
@@ -39,7 +54,7 @@ export const deleteWorkout = (req: FastifyRequest<{ Params: GetWorkoutByIdParams
   const success = workoutService.deleteWorkout(id);
 
   if (!success) {
-    return res.status(404).send({ message: 'Workout not found' });
+    return res.status(404).send({ data: 'Workout not found' });
   }
-  return res.send(`Delete workout with ID: ${id}`);
+  return res.status(204).send();
 };

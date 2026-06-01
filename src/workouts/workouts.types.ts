@@ -1,3 +1,5 @@
+import type { ApiResponse } from '../shared/types';
+
 export enum WorkoutStatus {
   IN_PROGRESS = 'in_progress',
   FINISHED = 'finished',
