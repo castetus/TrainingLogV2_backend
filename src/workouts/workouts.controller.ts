@@ -1,5 +1,5 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
-import { CreateWorkoutRequest, GetWorkoutByIdParams, UpdateWorkoutRequest, Workout } from './workouts.types';
+import type { FastifyRequest, FastifyReply } from 'fastify';
+import type { CreateWorkoutRequest, GetWorkoutByIdParams, UpdateWorkoutRequest, Workout } from './workouts.types';
 import { workoutService } from './workout.service';
 import type { ApiResponse } from '../shared/types';
 

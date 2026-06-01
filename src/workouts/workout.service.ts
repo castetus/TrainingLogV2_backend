@@ -1,4 +1,5 @@
-import { Workout, CreateWorkoutRequest, WorkoutStatus } from './workouts.types';
+import type { Workout, CreateWorkoutRequest} from './workouts.types';
+import { WorkoutStatus } from './workouts.types';
 import crypto from 'node:crypto';
 
 const workouts: Workout[] = [];
