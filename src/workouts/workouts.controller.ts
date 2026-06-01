@@ -1,7 +1,7 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
 import type { CreateWorkoutRequest, GetWorkoutByIdParams, UpdateWorkoutRequest, Workout } from './workouts.types';
 import { workoutService } from './workout.service';
-import type { ApiResponse } from '../shared/types';
+import type { ApiResponse } from '@/shared/types';
 
 export const getAllWorkouts = (req: FastifyRequest, res: FastifyReply) => {
   const workouts = workoutService.getAllWorkouts();
