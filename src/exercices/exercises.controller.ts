@@ -21,4 +21,10 @@ export const createExercise = async (req: FastifyRequest<{ Body: CreateExerciseR
     data: newExercise,
   };
   return res.send(response);
-}
+};
+
+export const filterExercises = async (req: FastifyRequest<{ Querystring: { search: string } }>, res: FastifyReply) => {
+  const searchResult = await exercisesService.filterExercises(req.query.search);
+
+  return res.send(searchResult);
+};

@@ -9,11 +9,36 @@ export async function findExercises() {
   return result.rows;
 };
 
-export async function createExercise() {
-  const result = await pool.query(
-    'INSERT '
-  )
-};
+export async function findExerciseById(
+  id: string,
+): Promise<Exercise | null> {
+  const result = await pool.query<Exercise>(
+    `
+      SELECT *
+      FROM exercises
+      WHERE id = $1
+    `,
+    [id],
+  );
+
+  return result.rows[0] ?? null;
+}
+
+export async function filterExercisesByName(
+  searchString: string,
+): Promise<Exercise[]> {
+  const result = await pool.query<Exercise>(
+    `
+      SELECT *
+      FROM exercises
+      WHERE name ILIKE $1
+      LIMIT 10
+    `,
+    [searchString],
+  );
+
+  return result.rows;
+}
 
 export async function insertExercise(params: CreateExerciseRequest) {
   const result = await pool.query<Exercise>(
