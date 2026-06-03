@@ -28,3 +28,7 @@ export const filterExercises = async (req: FastifyRequest<{ Querystring: { searc
 
   return res.send(searchResult);
 };
+
+export const updateExercise = async (req: FastifyRequest<{ Params: { id: string }, Body: CreateExerciseRequest }>, res: FastifyReply) => {
+  const updatedExrcise = await exercisesService.updateExercise(req.id, req.body);
+};

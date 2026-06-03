@@ -56,3 +56,24 @@ export async function insertExercise(params: CreateExerciseRequest) {
 
   return result.rows[0];
 };
+
+export async function updateExercise( id: string, params: CreateExerciseRequest) {
+  const result = await pool.query<Exercise>(
+    `
+      UPDATE INTO exercises
+      SET
+        name = $1,
+        description = $2,
+        type = $3,
+        updated_at = now()
+        WHERE id = $4
+        RETURNING *
+    `,
+    [
+      params.name,
+      params.description,
+      params.type,
+      id,
+    ],
+  )
+}
