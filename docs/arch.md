@@ -113,7 +113,7 @@
 - sets
 - weight
 - workouts
-- exercices
+- exercises
 - continuation
 - calculatedAt
 

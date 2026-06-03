@@ -12,7 +12,7 @@ import { getWorkoutByIdDto } from './dto/get-workout.dto';
 
 
 export function workoutRoutes (app: FastifyInstance) {
-  app.get('/workouts', { schema: getWorkoutByIdDto }, getAllWorkouts);
+  app.get('/workouts', getAllWorkouts);
 
   app.post('/workouts', { schema: createWorkoutDto }, createWorkout);
 
