@@ -57,7 +57,7 @@ export async function insertExercise(params: CreateExerciseRequest) {
   return result.rows[0];
 };
 
-export async function updateExercise( id: string, params: CreateExerciseRequest) {
+export async function patchExercise(id: string, params: CreateExerciseRequest) {
   const result = await pool.query<Exercise>(
     `
       UPDATE INTO exercises
@@ -76,4 +76,20 @@ export async function updateExercise( id: string, params: CreateExerciseRequest)
       id,
     ],
   )
-}
+};
+
+export async function removeExercise(
+  id: string,
+): Promise<Exercise | null> {
+  const result = await pool.query(
+    `
+      DELETE
+      FROM exercises
+      WHERE id = $1
+      RETURNING *
+    `,
+    [id],
+  );
+
+  return result.rows[0] ?? null;
+};

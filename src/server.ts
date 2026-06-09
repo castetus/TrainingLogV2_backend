@@ -1,8 +1,19 @@
 import fastify from 'fastify';
+import 'dotenv/config';
 import { workoutRoutes } from './workouts/workout.routes';
+import { exercisesRoutes } from './exercices/exercises.routes';
+import cors from '@fastify/cors';
 
 const server = fastify();
+
+await server.register(cors, {
+  origin: 'http://localhost:5173',
+  credentials: true,
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+});
+
 server.register(workoutRoutes);
+server.register(exercisesRoutes);
 
 server.listen({ port: 3000 }, (err, address) => {
   if (err) {

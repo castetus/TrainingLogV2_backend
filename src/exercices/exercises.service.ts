@@ -1,4 +1,10 @@
-import { findExercises, insertExercise, filterExercisesByName } from './exercises.repository';
+import {
+  findExercises,
+  insertExercise,
+  filterExercisesByName,
+  patchExercise,
+  removeExercise,
+} from './exercises.repository';
 import { CreateExerciseRequest } from './exercises.types';
 
 const getAllExercises = async () => {
@@ -15,12 +21,17 @@ const filterExercises = async (searchString: string) => {
 };
 
 const updateExercise = async (id: string, params: CreateExerciseRequest) => {
-  return await updateExercise(id, params);
+  return await patchExercise(id, params);
 };
+
+const deleteExercise = async (id: string) => {
+  return await removeExercise(id);
+}
 
 export const exercisesService = {
   getAllExercises,
   filterExercises,
   createExercise,
   updateExercise,
+  deleteExercise,
 };
