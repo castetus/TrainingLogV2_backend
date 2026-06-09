@@ -1,5 +1,6 @@
 import {
   findExercises,
+  findExerciseById,
   insertExercise,
   filterExercisesByName,
   patchExercise,
@@ -10,6 +11,10 @@ import { CreateExerciseRequest } from './exercises.types';
 const getAllExercises = async () => {
   const result = await findExercises();
   return result;
+};
+
+const getExerciseById = async (id: string) => {
+  return await findExerciseById(id);
 };
 
 const createExercise = async (req: CreateExerciseRequest) => {
@@ -30,6 +35,7 @@ const deleteExercise = async (id: string) => {
 
 export const exercisesService = {
   getAllExercises,
+  getExerciseById,
   filterExercises,
   createExercise,
   updateExercise,

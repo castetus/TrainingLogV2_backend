@@ -15,6 +15,18 @@ export const getAllExercises = async (req: FastifyRequest, res: FastifyReply) =>
   return res.send(response);
 };
 
+export const getExerciseById = async (req: FastifyRequest<{ Params: { id: string } }>, res: FastifyReply) => {
+  const { id } = req.params;
+  const exercise = await exercisesService.getExerciseById(id);
+  if (!exercise) {
+    return res.status(404).send({ message: 'Exercise not found' });
+  }
+  const response: ApiResponse<Exercise> = {
+    data: exercise,
+  };
+  return res.send(response);
+}
+
 export const createExercise = async (req: FastifyRequest<{ Body: CreateExerciseRequest }>, res: FastifyReply) => {
   const newExercise = await exercisesService.createExercise(req.body);
   const response: ApiResponse<Exercise> = {
