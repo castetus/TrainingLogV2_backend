@@ -19,3 +19,11 @@ export type User = {
 export type UserEntity = User & {
   password_hash: string;
 };
+
+export type UserWithToken = User & {
+  token: string;
+};
+
+export type JwtPayload = {
+  userId: string;
+};

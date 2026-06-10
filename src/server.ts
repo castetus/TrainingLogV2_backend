@@ -4,8 +4,12 @@ import { workoutRoutes } from './workouts/workout.routes';
 import { exercisesRoutes } from './exercices/exercises.routes';
 import cors from '@fastify/cors';
 import { authRoutes } from './auth/auth.routes';
+import cookie from '@fastify/cookie';
+import { authenticate } from './middleware/authenticate';
 
 const server = fastify();
+
+await server.register(cookie);
 
 await server.register(cors, {
   origin: 'http://localhost:5173',
@@ -14,8 +18,13 @@ await server.register(cors, {
 });
 
 server.register(authRoutes);
-server.register(workoutRoutes);
-server.register(exercisesRoutes);
+
+server.register(async (privateRoutes) => {
+  privateRoutes.addHook('preHandler', authenticate);
+
+  privateRoutes.register(exercisesRoutes);
+  privateRoutes.register(workoutRoutes);
+});
 
 server.listen({ port: 3000 }, (err, address) => {
   if (err) {

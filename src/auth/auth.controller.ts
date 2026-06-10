@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { LoginRequest, RegisterRequest } from "./auth.types";
 import { authService } from "./auth.service";
+import 'dotenv/config';
 
 export const getCurrentUser = async (req: FastifyRequest, res: FastifyReply) => {
   // const user = await authService.getUserById(req.user.id);
@@ -25,5 +26,12 @@ export const login = async (req: FastifyRequest<{ Body: LoginRequest }>, res: Fa
   if (!user) {
     return res.status(401).send({ message: 'Invalid email or password' });
   }
-  return res.send({ data: { user } });
+  return res
+    .setCookie('token', user.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 15 * 60 * 24,
+    })
+    .send({ data: { user } });
 }
