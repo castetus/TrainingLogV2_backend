@@ -15,7 +15,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "db:migrate": "./scripts/run-migrations.sh"
+    "migrate": "tsx src/db/migrate.ts"
   },
   "keywords": [],
   "author": "",

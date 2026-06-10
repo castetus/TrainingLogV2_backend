@@ -10,3 +10,7 @@ export type Exercise = {
 }
 
 export type CreateExerciseRequest = Pick<Exercise, 'name' | 'description' | 'type'>;
+
+export type GetExercisesQuery = {
+  search?: string;
+};

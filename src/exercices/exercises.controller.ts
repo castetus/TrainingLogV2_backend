@@ -1,18 +1,17 @@
 import type { ApiResponse } from '@/shared/types';
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import type { Exercise, CreateExerciseRequest } from './exercises.types';
+import type { Exercise, CreateExerciseRequest, GetExercisesQuery } from './exercises.types';
 import { exercisesService } from './exercises.service';
 
+export const getExercises = async (
+  req: FastifyRequest<{ Querystring: GetExercisesQuery }>,
+  reply: FastifyReply,
+) => {
+  const search = req.query.search?.trim() ?? '';
 
-export const getAllExercises = async (req: FastifyRequest, res: FastifyReply) => {
-  const exercises = await exercisesService.getAllExercises();
-  const response: ApiResponse<Exercise[], { total: number }> = {
-    data: exercises,
-    meta: {
-      total: exercises.length,
-    }
-  }
-  return res.send(response);
+  const exercises = await exercisesService.getExercises({ search });
+
+  return reply.send({ data: exercises });
 };
 
 export const getExerciseById = async (req: FastifyRequest<{ Params: { id: string } }>, res: FastifyReply) => {

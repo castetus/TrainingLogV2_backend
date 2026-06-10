@@ -8,9 +8,12 @@ import {
 } from './exercises.repository';
 import { CreateExerciseRequest } from './exercises.types';
 
-const getAllExercises = async () => {
-  const result = await findExercises();
-  return result;
+const getExercises = async ({ search }: { search: string }) => {
+
+  if (search) {
+    return await filterExercisesByName(search);
+  }
+  return await findExercises();
 };
 
 const getExerciseById = async (id: string) => {
@@ -34,7 +37,7 @@ const deleteExercise = async (id: string) => {
 }
 
 export const exercisesService = {
-  getAllExercises,
+  getExercises,
   getExerciseById,
   filterExercises,
   createExercise,

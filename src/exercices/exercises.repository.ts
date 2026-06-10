@@ -34,7 +34,7 @@ export async function filterExercisesByName(
       WHERE name ILIKE $1
       LIMIT 10
     `,
-    [searchString],
+    [`%${searchString}%`],
   );
 
   return result.rows;
