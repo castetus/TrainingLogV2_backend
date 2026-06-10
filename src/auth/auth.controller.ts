@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { LoginRequest, RegisterRequest } from "./auth.types";
 import { authService } from "./auth.service";
 import 'dotenv/config';
-import { ACCESS_TOKEN_COOKIE } from "@/shared/constants";
+import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/auth/auth.cookies";
 
 export const getCurrentUser = async (req: FastifyRequest, res: FastifyReply) => {
   // const user = await authService.getUserById(req.user.id);
@@ -35,6 +35,13 @@ export const login = async (req: FastifyRequest<{ Body: LoginRequest }>, res: Fa
       sameSite: 'lax',
       maxAge: 15 * 60,
     })
+    .setCookie(REFRESH_TOKEN_COOKIE, user.refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 30 * 24 * 60 * 60,
+    })
     .send({ data: { user } });
 }
 
@@ -45,5 +52,18 @@ export const logout = async (req: FastifyRequest, res: FastifyReply) => {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
     })
+    .clearCookie(REFRESH_TOKEN_COOKIE, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    })
     .send({ message: 'Logged out successfully' });
+};
+
+export const checkRefreshToken = async (req: FastifyRequest, res: FastifyReply) => {
+  const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE];
+
+  if (!refreshToken) {
+    return res.status(401).send({ message: 'No refresh token provided' });
+  }
 };

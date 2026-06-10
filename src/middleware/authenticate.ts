@@ -1,26 +1,46 @@
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { JwtPayload } from '@/auth/auth.types';
-import { ACCESS_TOKEN_COOKIE } from '@/shared/constants';
+import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from '@/auth/auth.cookies';
+import { createAccessToken, verifyAccessToken, verifyRefreshToken } from '@/auth/auth.tokens';
 
 export async function authenticate(req: FastifyRequest, reply: FastifyReply) {
-  const token = req.cookies[ACCESS_TOKEN_COOKIE];
 
-  if (!token) {
-    reply.code(401);
-    throw new Error('Unauthorized test');
-  }
+  const accessToken = req.cookies[ACCESS_TOKEN_COOKIE];
 
   try {
-    const payload = jwt.verify(
-      token,
-      process.env.JWT_SECRET!,
-    ) as JwtPayload;
+    const payload = verifyAccessToken(accessToken);
+    req.user = { userId: payload.userId };
+    return;
+  } catch (error) {
+    if (!(error instanceof jwt.TokenExpiredError)) {
+      return reply.code(401).send({ message: 'Unauthorized' });
+    }
 
-    req.user = payload;
-  } catch {
-    reply.code(401);
-    throw new Error('Unauthorized');
+    const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE];
+
+    try {
+      const payload = verifyRefreshToken(refreshToken);
+
+      const newAccessToken = createAccessToken({
+        userId: payload.userId,
+      });
+
+      reply.setCookie('accessToken', newAccessToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 15 * 60,
+      });
+
+      req.user = {
+        userId: payload.userId,
+      };
+
+      return;
+    } catch {
+      return reply.code(401).send({ message: 'Unauthorized' });
+    }
   }
 };

@@ -6,4 +6,9 @@ declare module 'fastify' {
       userId: string;
     };
   }
+  interface FastifyReply {
+    setAccessToken(token: string): void;
+    setRefreshToken(token: string): void;
+    clearAuthCookies(): void;
+  }
 }
