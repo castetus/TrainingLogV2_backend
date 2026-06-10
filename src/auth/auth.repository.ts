@@ -37,3 +37,15 @@ export async function findUserByEmail(login: string): Promise<UserEntity | null>
   );
   return result.rows[0] || null;
 };
+
+export async function getUserPasswordHashById(userId: string): Promise<string | null> {
+  const result = await pool.query(
+    `
+    SELECT password_hash
+    FROM users
+    WHERE id = $1;
+    `,
+    [userId],
+  );
+  return result.rows[0]?.password_hash || null;
+};

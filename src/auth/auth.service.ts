@@ -1,4 +1,4 @@
-import { findUserByEmail, insertUser } from "./auth.repository";
+import { findUserByEmail, insertUser, getUserPasswordHashById } from "./auth.repository";
 import bcrypt from 'bcrypt';
 import { User, UserWithToken } from "./auth.types";
 import jwt from 'jsonwebtoken';
@@ -19,7 +19,12 @@ const login = async (data: { login: string, password: string }): Promise<UserWit
     return null;
   }
 
-  const isPasswordValid = await bcrypt.compare(data.password, user.password_hash);
+  const userPasswordHash = await getUserPasswordHashById(user.id);
+  if (!userPasswordHash) {
+    return null;
+  }
+
+  const isPasswordValid = await bcrypt.compare(data.password, userPasswordHash);
   if (!isPasswordValid) {
     return null;
   }

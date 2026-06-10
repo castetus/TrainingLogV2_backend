@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { LoginRequest, RegisterRequest } from "./auth.types";
 import { authService } from "./auth.service";
 import 'dotenv/config';
+import { ACCESS_TOKEN_COOKIE } from "@/shared/constants";
 
 export const getCurrentUser = async (req: FastifyRequest, res: FastifyReply) => {
   // const user = await authService.getUserById(req.user.id);
@@ -27,11 +28,22 @@ export const login = async (req: FastifyRequest<{ Body: LoginRequest }>, res: Fa
     return res.status(401).send({ message: 'Invalid email or password' });
   }
   return res
-    .setCookie('token', user.token, {
+    .setCookie(ACCESS_TOKEN_COOKIE, user.token, {
+      path: '/',
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 15 * 60 * 24,
+      maxAge: 15 * 60,
     })
     .send({ data: { user } });
 }
+
+export const logout = async (req: FastifyRequest, res: FastifyReply) => {
+  return res
+    .clearCookie(ACCESS_TOKEN_COOKIE, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    })
+    .send({ message: 'Logged out successfully' });
+};
