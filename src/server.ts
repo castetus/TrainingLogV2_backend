@@ -3,6 +3,7 @@ import 'dotenv/config';
 import { workoutRoutes } from './workouts/workout.routes';
 import { exercisesRoutes } from './exercices/exercises.routes';
 import cors from '@fastify/cors';
+import { authRoutes } from './auth/auth.routes';
 
 const server = fastify();
 
@@ -12,6 +13,7 @@ await server.register(cors, {
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
 });
 
+server.register(authRoutes);
 server.register(workoutRoutes);
 server.register(exercisesRoutes);
 
