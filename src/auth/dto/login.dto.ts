@@ -9,7 +9,7 @@ export const loginDto = {
       },
       password: {
         type: 'string',
-        minLength: 1,
+        minLength: 4,
       },
     },
   },

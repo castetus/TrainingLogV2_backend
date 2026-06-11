@@ -49,3 +49,19 @@ export async function getUserPasswordHashById(userId: string): Promise<string | 
   );
   return result.rows[0]?.password_hash || null;
 };
+
+export async function findUserById(userId: string): Promise<User | null> {
+  const result = await pool.query(
+    `
+    SELECT
+      id,
+      name,
+      login,
+      created_at
+    FROM users
+    WHERE id = $1;
+    `,
+    [userId],
+  );
+  return result.rows[0] || null;
+};

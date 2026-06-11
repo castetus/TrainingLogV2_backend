@@ -1,4 +1,4 @@
-import { findUserByEmail, insertUser, getUserPasswordHashById } from "./auth.repository";
+import { findUserByEmail, insertUser, getUserPasswordHashById, findUserById } from "./auth.repository";
 import bcrypt from 'bcrypt';
 import { User, UserWithToken } from "./auth.types";
 import jwt from 'jsonwebtoken';
@@ -48,7 +48,16 @@ const login = async (data: { login: string, password: string }): Promise<UserWit
   };
 };
 
+const getUserById = async (id: string): Promise<User | null> => {
+  const user = await findUserById(id);
+  if (!user) {
+    return null;
+  }
+  return user;
+};
+
 export const authService = {
   register,
   login,
+  getUserById,
 };

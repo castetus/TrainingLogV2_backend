@@ -5,11 +5,11 @@ import 'dotenv/config';
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/auth/auth.cookies";
 
 export const getCurrentUser = async (req: FastifyRequest, res: FastifyReply) => {
-  // const user = await authService.getUserById(req.user.id);
-  // if (!user) {
-  //   return res.status(404).send({ message: 'User not found' });
-  // }
-  // return res.send({ data: user });
+  const user = await authService.getUserById(req.user.userId);
+  if (!user) {
+    return res.status(404).send({ message: 'User not found' });
+  }
+  return res.send({ data: user });
 };
 
 export const register = async (req: FastifyRequest<{ Body: RegisterRequest }>, res: FastifyReply) => {
@@ -37,7 +37,7 @@ export const login = async (req: FastifyRequest<{ Body: LoginRequest }>, res: Fa
     })
     .setCookie(REFRESH_TOKEN_COOKIE, user.refreshToken, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
       maxAge: 30 * 24 * 60 * 60,

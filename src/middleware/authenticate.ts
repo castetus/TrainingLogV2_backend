@@ -13,9 +13,10 @@ export async function authenticate(req: FastifyRequest, reply: FastifyReply) {
     req.user = { userId: payload.userId };
     return;
   } catch (error) {
-    if (!(error instanceof jwt.TokenExpiredError)) {
-      return reply.code(401).send({ message: 'Unauthorized' });
-    }
+    // console.log('Access token error:', error, error instanceof jwt.TokenExpiredError);
+    // if (!(error instanceof jwt.TokenExpiredError)) {
+    //   return reply.code(401).send({ message: 'Unauthorized' });
+    // }
 
     const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE];
 
