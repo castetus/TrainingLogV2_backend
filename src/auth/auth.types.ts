@@ -21,7 +21,7 @@ export type UserEntity = User & {
 };
 
 export type UserWithToken = User & {
-  token: string;
+  accessToken: string;
   refreshToken: string;
 };
 

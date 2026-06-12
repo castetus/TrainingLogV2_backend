@@ -1,16 +1,24 @@
 import { findUserByEmail, insertUser, getUserPasswordHashById, findUserById } from "./auth.repository";
 import bcrypt from 'bcrypt';
 import { User, UserWithToken } from "./auth.types";
-import jwt from 'jsonwebtoken';
+import { createAccessToken, createRefreshToken } from "./auth.tokens";
 
-const register = async (data: {name: string, email: string, password: string }): Promise<User | null> => {
+const register = async (data: {name: string, email: string, password: string }): Promise<UserWithToken | null> => {
   const passwordHash = await bcrypt.hash(data.password, 10);
   const existingUser = await findUserByEmail(data.email);
   if (existingUser) {
     return null;
   }
   const newUser = await insertUser(data.name, data.email, passwordHash);
-  return newUser;
+
+  const accessToken = createAccessToken({ userId: newUser.id });
+  const refreshToken = createRefreshToken({ userId: newUser.id });
+
+  return {
+    ...newUser,
+    accessToken,
+    refreshToken,
+  };
 };
 
 const login = async (data: { login: string, password: string }): Promise<UserWithToken | null> => {
@@ -29,21 +37,12 @@ const login = async (data: { login: string, password: string }): Promise<UserWit
     return null;
   }
 
-  const token = jwt.sign(
-    { userId: user.id },
-    process.env.JWT_ACCESS_SECRET!,
-    { expiresIn: '15m' }
-  );
-
-  const refreshToken = jwt.sign(
-    { userId: user.id },
-    process.env.JWT_REFRESH_SECRET!,
-    { expiresIn: '30d' }
-  );
+  const accessToken = createAccessToken({ userId: user.id });
+  const refreshToken = createRefreshToken({ userId: user.id });
 
   return {
     ...user,
-    token,
+    accessToken,
     refreshToken,
   };
 };

@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { LoginRequest, RegisterRequest } from "./auth.types";
 import { authService } from "./auth.service";
 import 'dotenv/config';
-import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/auth/auth.cookies";
+import { clearAuthCookies, REFRESH_TOKEN_COOKIE, setAuthCookies } from "@/auth/auth.cookies";
 
 export const getCurrentUser = async (req: FastifyRequest, res: FastifyReply) => {
   const user = await authService.getUserById(req.user.userId);
@@ -18,6 +18,11 @@ export const register = async (req: FastifyRequest<{ Body: RegisterRequest }>, r
   if (!newUser) {
     return res.status(409).send({ message: 'User with this email already exists' });
   }
+  setAuthCookies(
+    res,
+    newUser.accessToken,
+    newUser.refreshToken,
+  );
   return res.send({ data: newUser });
 };
 
@@ -27,37 +32,22 @@ export const login = async (req: FastifyRequest<{ Body: LoginRequest }>, res: Fa
   if (!user) {
     return res.status(401).send({ message: 'Invalid email or password' });
   }
-  return res
-    .setCookie(ACCESS_TOKEN_COOKIE, user.token, {
-      path: '/',
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 15 * 60,
-    })
-    .setCookie(REFRESH_TOKEN_COOKIE, user.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 30 * 24 * 60 * 60,
-    })
-    .send({ data: { user } });
-}
+  setAuthCookies(
+    res,
+    user.accessToken,
+    user.refreshToken,
+  );
+  
+  return res.send({
+    data: {
+      user,
+    },
+  });
+};
 
 export const logout = async (req: FastifyRequest, res: FastifyReply) => {
-  return res
-    .clearCookie(ACCESS_TOKEN_COOKIE, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-    })
-    .clearCookie(REFRESH_TOKEN_COOKIE, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-    })
-    .send({ message: 'Logged out successfully' });
+  clearAuthCookies(res);
+  res.send({ message: 'Logged out successfully' });
 };
 
 export const checkRefreshToken = async (req: FastifyRequest, res: FastifyReply) => {

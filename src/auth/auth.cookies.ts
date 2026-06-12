@@ -26,4 +26,13 @@ export function setRefreshTokenCookie(reply: FastifyReply, token: string) {
 export function clearAuthCookies(reply: FastifyReply) {
   reply.clearCookie(ACCESS_TOKEN_COOKIE);
   reply.clearCookie(REFRESH_TOKEN_COOKIE);
-}
+};
+
+export function setAuthCookies(
+  reply: FastifyReply,
+  accessToken: string,
+  refreshToken: string,
+): void {
+  setAccessTokenCookie(reply, accessToken);
+  setRefreshTokenCookie(reply, refreshToken);
+};
