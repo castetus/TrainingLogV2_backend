@@ -34,6 +34,11 @@ export type Session = {
   id: string;
   userId: string;
   refreshTokenHash: string;
-  createdAt: string;
-  expiresAt: string;
+  createdAt: Date;
+  expiresAt: Date;
 }
+
+export type GoogleCallbackQuery = {
+  code: string;
+  state: string;
+};

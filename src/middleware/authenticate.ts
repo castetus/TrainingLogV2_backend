@@ -27,9 +27,10 @@ export async function authenticate(req: FastifyRequest, reply: FastifyReply) {
         return reply.code(401).send({ message: 'Unauthorized' });
       }
 
+      const sessionExpired = existedSession.expiresAt < new Date(Date.now());
       const isSessionHashValid = await bcrypt.compare(existedSession.refreshTokenHash, refreshToken);
 
-      if (!isSessionHashValid) {
+      if (!isSessionHashValid || sessionExpired) {
         clearAuthCookies(reply);
         return reply.code(401).send({ message: 'Unauthorized' });
       }

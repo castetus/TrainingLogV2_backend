@@ -4,8 +4,9 @@ import {
   getUserPasswordHashById,
   findUserById,
   insertSession,
-  findSessionById,
   deleteSession,
+  findUserByGoogleId,
+  insertGoogleUser,
 } from "./auth.repository";
 import bcrypt from 'bcrypt';
 import { Session, User, UserWithToken } from "./auth.types";
@@ -87,9 +88,30 @@ const logoutUser = async (id: string) => {
   await deleteSession(id);
 };
 
+const findOrCreateGoogleUser = async ({ googleId, email, name }: { googleId: string, email: string, name: string }) => {
+  let googleUser = await findUserByGoogleId(googleId);
+
+  if (!googleUser) {
+    googleUser = await insertGoogleUser({ googleId, email, name });
+  }
+
+  if (!googleUser) {
+    throw new Error('Failed to create Google user');
+  }
+
+  const { accessToken, refreshToken } = await createAuthSession(googleUser);
+
+  return {
+    ...googleUser,
+    accessToken,
+    refreshToken,
+  };
+};
+
 export const authService = {
   register,
   login,
   getUserById,
   logoutUser,
+  findOrCreateGoogleUser,
 };

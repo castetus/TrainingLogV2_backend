@@ -67,7 +67,7 @@ export async function findUserById(userId: string): Promise<User | null> {
 };
 
 export async function insertSession({ userId, refreshTokenHash, expiresAt }:
-  { userId: string, refreshTokenHash: string, expiresAt: string }): Promise<Session> {
+  { userId: string, refreshTokenHash: string, expiresAt: Date }): Promise<Session> {
   const result = await pool.query(
     `    
     INSERT INTO sessions (
@@ -110,4 +110,37 @@ export async function deleteSession (id: string): Promise<Session | null> {
     [id],
   );
   return result.rows[0] || null;
-}
+};
+
+export async function findUserByGoogleId (googleId: string): Promise<User | null> {
+  const result = await pool.query(
+    `
+      SELECT * FROM users
+      WHERE google_id = $1
+    `,
+    [googleId]
+  );
+
+  return result.rows[0] || null;
+};
+
+export async function insertGoogleUser ({ googleId, email, name }: { googleId: string, email: string, name: string }): Promise<User | null> {
+  const result = await pool.query(
+    `
+    INSERT INTO users (
+      google_id,
+      login,
+      name
+    )
+    VALUES ($1, $2, $3)
+    RETURNING
+      id,
+      name,
+      login,
+      created_at;
+    `,
+    [googleId, email, name],
+  );
+
+  return result.rows[0] || null;
+};
