@@ -2,7 +2,10 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { LoginRequest, RegisterRequest } from "./auth.types";
 import { authService } from "./auth.service";
 import 'dotenv/config';
-import { clearAuthCookies, REFRESH_TOKEN_COOKIE, setAuthCookies } from "@/auth/auth.cookies";
+import { clearAuthCookies, setAuthCookies } from "@/auth/auth.cookies";
+import { verifyRefreshToken } from "./auth.tokens";
+import { REFRESH_TOKEN_COOKIE } from "./auth.constants";
+
 
 export const getCurrentUser = async (req: FastifyRequest, res: FastifyReply) => {
   const user = await authService.getUserById(req.user.userId);
@@ -46,7 +49,13 @@ export const login = async (req: FastifyRequest<{ Body: LoginRequest }>, res: Fa
 };
 
 export const logout = async (req: FastifyRequest, res: FastifyReply) => {
+
+  const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE];
+
+  const payload = verifyRefreshToken(refreshToken);
+  authService.logoutUser(payload.sessionId);
   clearAuthCookies(res);
+
   res.send({ message: 'Logged out successfully' });
 };
 

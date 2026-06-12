@@ -1,8 +1,6 @@
 import { FastifyReply } from "fastify";
 import 'dotenv/config';
-
-export const ACCESS_TOKEN_COOKIE = 'accessToken';
-export const REFRESH_TOKEN_COOKIE = 'refreshToken';
+import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "./auth.constants";
 
 export function setAccessTokenCookie(reply: FastifyReply, token: string) {
   reply.setCookie(ACCESS_TOKEN_COOKIE, token, {

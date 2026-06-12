@@ -27,4 +27,13 @@ export type UserWithToken = User & {
 
 export type JwtPayload = {
   userId: string;
+  sessionId: string;
 };
+
+export type Session = {
+  id: string;
+  userId: string;
+  refreshTokenHash: string;
+  createdAt: string;
+  expiresAt: string;
+}

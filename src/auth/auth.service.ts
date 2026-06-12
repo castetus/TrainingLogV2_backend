@@ -1,7 +1,37 @@
-import { findUserByEmail, insertUser, getUserPasswordHashById, findUserById } from "./auth.repository";
+import {
+  findUserByEmail,
+  insertUser,
+  getUserPasswordHashById,
+  findUserById,
+  insertSession,
+  findSessionById,
+  deleteSession,
+} from "./auth.repository";
 import bcrypt from 'bcrypt';
-import { User, UserWithToken } from "./auth.types";
+import { Session, User, UserWithToken } from "./auth.types";
 import { createAccessToken, createRefreshToken } from "./auth.tokens";
+import crypto from 'node:crypto';
+import { REFRESH_TOKEN_TTL_DAYS } from './auth.constants';
+
+const createAuthSession = async (user: User): Promise<{ accessToken: string, refreshToken: string, session: Session }> => {
+  const sessionId = crypto.randomUUID();
+
+  const accessToken = createAccessToken({ userId: user.id });
+  const refreshToken = createRefreshToken({ userId: user.id, sessionId });
+  const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
+
+  const expiresAt = new Date(
+    Date.now() + REFRESH_TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000
+  );
+
+  const newSession = await insertSession({ userId: user.id, refreshTokenHash, expiresAt });
+
+  return {
+    accessToken,
+    refreshToken,
+    session: newSession,
+  };
+};
 
 const register = async (data: {name: string, email: string, password: string }): Promise<UserWithToken | null> => {
   const passwordHash = await bcrypt.hash(data.password, 10);
@@ -11,8 +41,7 @@ const register = async (data: {name: string, email: string, password: string }):
   }
   const newUser = await insertUser(data.name, data.email, passwordHash);
 
-  const accessToken = createAccessToken({ userId: newUser.id });
-  const refreshToken = createRefreshToken({ userId: newUser.id });
+  const { accessToken, refreshToken } = await createAuthSession(newUser);
 
   return {
     ...newUser,
@@ -37,8 +66,7 @@ const login = async (data: { login: string, password: string }): Promise<UserWit
     return null;
   }
 
-  const accessToken = createAccessToken({ userId: user.id });
-  const refreshToken = createRefreshToken({ userId: user.id });
+  const { accessToken, refreshToken } = await createAuthSession(user);
 
   return {
     ...user,
@@ -55,8 +83,13 @@ const getUserById = async (id: string): Promise<User | null> => {
   return user;
 };
 
+const logoutUser = async (id: string) => {
+  await deleteSession(id);
+};
+
 export const authService = {
   register,
   login,
   getUserById,
+  logoutUser,
 };
