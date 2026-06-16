@@ -3,7 +3,10 @@ import { CreateExerciseRequest, Exercise } from './exercises.types';
 
 export async function findExercises() {
   const result = await pool.query<Exercise>(
-    'SELECT * FROM exercises',
+    `
+      SELECT * FROM exercises
+      WHERE is_archived = FALSE
+    `,
   );
 
   return result.rows;
@@ -31,7 +34,9 @@ export async function filterExercisesByName(
     `
       SELECT *
       FROM exercises
-      WHERE name ILIKE $1
+      WHERE is_archived = FALSE
+        AND name ILIKE $1
+      ORDER BY name
       LIMIT 10
     `,
     [`%${searchString}%`],
@@ -60,7 +65,7 @@ export async function insertExercise(params: CreateExerciseRequest) {
 export async function patchExercise(id: string, params: CreateExerciseRequest) {
   const result = await pool.query<Exercise>(
     `
-      UPDATE INTO exercises
+      UPDATE exercises
       SET
         name = $1,
         description = $2,
@@ -83,10 +88,10 @@ export async function removeExercise(
 ): Promise<Exercise | null> {
   const result = await pool.query(
     `
-      DELETE
-      FROM exercises
+      UPDATE exercises
+      SET is_archived = TRUE
       WHERE id = $1
-      RETURNING *
+      RETURNING *;
     `,
     [id],
   );

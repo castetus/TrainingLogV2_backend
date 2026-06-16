@@ -1,0 +1,3 @@
+ALTER TABLE exercises
+  ADD COLUMN link TEXT,
+  ADD COLUMN is_archived BOOLEAN DEFAULT FALSE;
