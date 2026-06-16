@@ -1,7 +1,7 @@
 import fastify from 'fastify';
 import 'dotenv/config';
 import { workoutRoutes } from './workouts/workout.routes';
-import { exercisesRoutes } from './exercices/exercises.routes';
+import { exercisesRoutes } from './modules/exercices/exercises.routes';
 import cors from '@fastify/cors';
 import { authRoutes } from './auth/auth.routes';
 import cookie from '@fastify/cookie';
