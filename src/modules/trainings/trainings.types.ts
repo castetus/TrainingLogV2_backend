@@ -1,3 +1,5 @@
+import { ExerciseType } from "@/shared/types";
+
 type BaseUserExerciseConfig = {
   id: string;
   exerciseId: string;
@@ -31,3 +33,16 @@ export type Training = {
   userId: string;
 }
 
+type TrainingExerciseRequest = {
+  exerciseId: string;
+  order: number;
+  plannedSets?: number;
+  plannedReps?: number;
+  plannedWeight?: number;
+  plannedTime?: number;
+}
+
+export type TrainingCreateRequest = {
+  name: string;
+  exercices: TrainingExerciseRequest[];
+}
