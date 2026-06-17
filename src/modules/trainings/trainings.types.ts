@@ -33,9 +33,9 @@ export type Training = {
   userId: string;
 }
 
-type TrainingExerciseRequest = {
+export type TrainingExerciseRequest = {
   exerciseId: string;
-  order: number;
+  position: number;
   plannedSets?: number;
   plannedReps?: number;
   plannedWeight?: number;
@@ -44,5 +44,27 @@ type TrainingExerciseRequest = {
 
 export type TrainingCreateRequest = {
   name: string;
-  exercices: TrainingExerciseRequest[];
+  exercises: TrainingExerciseRequest[];
+}
+
+export type TrainingUpdateRequest = {
+  id: string;
+} & Partial<TrainingCreateRequest>;
+
+type TrainingExerciseDetails = {
+  exerciseId: string;
+  exerciseName: string;
+  exerciseType: ExerciseType;
+
+  position: number;
+
+  plannedSets?: number;
+  plannedReps?: number;
+  plannedWeight?: number;
+  plannedTime?: number;
+};
+
+export type TrainingDetailsResponse = {
+  name: string;
+  exercises: TrainingExerciseDetails[];
 }

@@ -16,14 +16,14 @@ export const createTrainingDto = {
 
           required: [
             'exerciseId',
-            'order',
+            'position',
           ],
 
           properties: {
             exerciseId: {
               type: 'string',
             },
-            order: {
+            position: {
               type: 'number',
             },
             plannedSets: {

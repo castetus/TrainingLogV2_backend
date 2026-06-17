@@ -7,6 +7,26 @@ import {
   boolean,
 } from 'drizzle-orm/pg-core';
 
+export const exercises = pgTable('exercises', {
+  id: uuid('id').defaultRandom().primaryKey(),
+
+  name: text('name').notNull(),
+
+  description: text('description').notNull(),
+
+  type: text('type', {
+    enum: ['weight', 'time', 'base'],
+  }).notNull(),
+
+  createdAt: timestamp('created_at')
+    .defaultNow()
+    .notNull(),
+
+  updatedAt: timestamp('updated_at')
+    .defaultNow()
+    .notNull(),
+});
+
 export const trainings = pgTable('trainings', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: uuid('user_id').notNull(),
@@ -36,5 +56,5 @@ export const trainingExercises = pgTable('training_exercises', {
   exerciseId: uuid('exercise_id').notNull(),
   userExerciseConfigId: uuid('user_exercise_config_id').notNull(),
 
-  order: integer('order').notNull(),
+  position: integer('position').notNull(),
 });
