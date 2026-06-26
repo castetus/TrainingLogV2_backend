@@ -5,6 +5,7 @@ import {
   timestamp,
   integer,
   boolean,
+  unique,
 } from 'drizzle-orm/pg-core';
 
 export const exercises = pgTable('exercises', {
@@ -47,7 +48,11 @@ export const userExerciseConfigs = pgTable('user_exercise_configs', {
 
   isArchived: boolean('is_archived').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-});
+  },
+  (table) => [
+    unique().on(table.userId, table.exerciseId),
+  ]
+);
 
 export const trainingExercises = pgTable('training_exercises', {
   id: uuid('id').defaultRandom().primaryKey(),

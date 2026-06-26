@@ -42,7 +42,22 @@ export async function insertTraining({ userId, name, exercises }: { userId: stri
         .returning();
 
       for (const item of exercises) {
-        const [config] = await tx
+        const [existingConfig] = await tx
+          .select()
+          .from(userExerciseConfigs)
+          .where(
+            and(
+              eq(userExerciseConfigs.userId, userId),
+              eq(userExerciseConfigs.exerciseId, item.exerciseId),
+            )
+          );
+
+        let config;
+
+        if (existingConfig) {
+          config = existingConfig;
+        } else {
+          [config] = await tx
           .insert(userExerciseConfigs)
           .values({
             userId,
@@ -53,6 +68,7 @@ export async function insertTraining({ userId, name, exercises }: { userId: stri
             plannedTime: item.plannedTime,
           })
           .returning();
+        }
 
         await tx.insert(trainingExercises).values({
           trainingId: training.id,

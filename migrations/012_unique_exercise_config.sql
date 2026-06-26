@@ -1,0 +1,3 @@
+ALTER TABLE user_exercise_configs
+ADD CONSTRAINT user_exercise_configs_user_id_exercise_id_unique
+UNIQUE (user_id, exercise_id);
