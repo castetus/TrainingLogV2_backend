@@ -32,7 +32,10 @@ export const updateTraining = async (req: FastifyRequest<{ Body: TrainingUpdateR
 };
 
 export const deleteTraining = async (req: FastifyRequest<{ Params: { id: string } }>, res: FastifyReply) => {
-  await trainingService.deleteTraining(req.params.id);
+  await trainingService.deleteTraining({
+    trainingId: req.params.id,
+    userId: req.user.userId,
+  });
 
   res.status(204).send();
 };

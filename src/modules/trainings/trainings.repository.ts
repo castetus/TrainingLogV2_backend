@@ -84,8 +84,13 @@ export async function patchTraining () {
 
 };
 
-export async function removeTraining (id: string) {
-  await db.transaction(async (tx) => {
-
-  })
+export async function removeTraining ({ trainingId, userId }: { trainingId: string; userId: string }) {
+  await db
+  .delete(trainings)
+  .where(
+    and(
+      eq(trainings.id, trainingId),
+      eq(trainings.userId, userId),
+    )
+  );
 };

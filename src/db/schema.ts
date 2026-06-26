@@ -52,8 +52,12 @@ export const userExerciseConfigs = pgTable('user_exercise_configs', {
 export const trainingExercises = pgTable('training_exercises', {
   id: uuid('id').defaultRandom().primaryKey(),
 
-  trainingId: uuid('training_id').notNull(),
-  userExerciseConfigId: uuid('user_exercise_config_id').notNull(),
+  trainingId: uuid('training_id').notNull().references(() => trainings.id, {
+    onDelete: 'cascade',
+  }),
+  userExerciseConfigId: uuid('user_exercise_config_id').notNull().references(() => userExerciseConfigs.id, {
+    onDelete: 'cascade',
+  }),
 
   position: integer('position').notNull(),
 });

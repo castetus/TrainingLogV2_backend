@@ -55,8 +55,8 @@ const updateTraining = async ({ data, userId }: { data: TrainingUpdateRequest, u
 
 };
 
-const deleteTraining = async (id: string) => {
-  await removeTraining(id);
+const deleteTraining = async ({ trainingId, userId }: { trainingId: string; userId: string }) => {
+  await removeTraining({ trainingId, userId });
 };
 
 export const trainingService = {
