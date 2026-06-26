@@ -6,6 +6,7 @@ import cors from '@fastify/cors';
 import { authRoutes } from './auth/auth.routes';
 import cookie from '@fastify/cookie';
 import { authenticate } from './middleware/authenticate';
+import { trainingsRoutes } from './modules/trainings/trainings.routes';
 
 const server = fastify();
 
@@ -23,6 +24,7 @@ server.register(async (privateRoutes) => {
   privateRoutes.addHook('preHandler', authenticate);
 
   privateRoutes.register(exercisesRoutes);
+  privateRoutes.register(trainingsRoutes);
   privateRoutes.register(workoutRoutes);
 });
 
