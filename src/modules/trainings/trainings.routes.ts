@@ -16,5 +16,5 @@ export function trainingsRoutes (app: FastifyInstance) {
   app.get('/trainings/:id', { schema: getTrainingDto }, getTrainingById);
   app.post('/trainings', { schema: createTrainingDto }, createTraining);
   // app.put('/trainings/:id', { schema: updateTrainingDto }, updateTraining);
-  // app.delete('/trainings/:id', deleteTraining);
+  app.delete('/trainings/:id', deleteTraining);
 }

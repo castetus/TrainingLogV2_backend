@@ -33,43 +33,59 @@ export async function findTrainingById ({ trainingId, userId }: { trainingId: st
     .orderBy(asc(trainingExercises.position))
 };
 
-export async function insertTraining ({ userId, name, exercises }: { userId: string, name: string, exercises: TrainingExerciseRequest[] }): Promise<Training | null> {
-  await db.transaction(async (tx) => {
-    const [training] = await tx
-      .insert(trainings)
-      .values({ userId, name })
-      .returning();
-
-    for (const item of exercises) {
-      const [config] = await tx
-        .insert(userExerciseConfigs)
-        .values({
-          userId,
-          exerciseId: item.exerciseId,
-          plannedSets: item.plannedSets,
-          plannedReps: item.plannedReps,
-          plannedWeight: item.plannedWeight,
-          plannedTime: item.plannedTime,
-        })
+export async function insertTraining({ userId, name, exercises }: { userId: string, name: string, exercises: TrainingExerciseRequest[] }): Promise<Training | null> {
+  try {
+    const result = await db.transaction(async (tx) => {
+      const [training] = await tx
+        .insert(trainings)
+        .values({ userId, name })
         .returning();
 
-      await tx.insert(trainingExercises).values({
-        trainingId: training.id,
-        exerciseId: item.exerciseId,
-        userExerciseConfigId: config.id,
-        position: item.position,
-      });
-    }
+      for (const item of exercises) {
+        const [config] = await tx
+          .insert(userExerciseConfigs)
+          .values({
+            userId,
+            exerciseId: item.exerciseId,
+            plannedSets: item.plannedSets,
+            plannedReps: item.plannedReps,
+            plannedWeight: item.plannedWeight,
+            plannedTime: item.plannedTime,
+          })
+          .returning();
 
-    return training;
-  });
-  return null;
+        await tx.insert(trainingExercises).values({
+          trainingId: training.id,
+          userExerciseConfigId: config.id,
+          position: item.position,
+        });
+      }
+
+      return training;
+    });
+
+    return result;
+  } catch (error: any) {
+    console.error('DB error:', {
+      message: error.message,
+      cause: error.cause,
+      code: error.cause?.code,
+      detail: error.cause?.detail,
+      constraint: error.cause?.constraint,
+      table: error.cause?.table,
+      column: error.cause?.column,
+    });
+
+    throw error;
+  }
 };
 
 export async function patchTraining () {
 
 };
 
-export async function removeTraining () {
+export async function removeTraining (id: string) {
+  await db.transaction(async (tx) => {
 
+  })
 };

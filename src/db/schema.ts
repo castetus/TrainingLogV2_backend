@@ -53,7 +53,6 @@ export const trainingExercises = pgTable('training_exercises', {
   id: uuid('id').defaultRandom().primaryKey(),
 
   trainingId: uuid('training_id').notNull(),
-  exerciseId: uuid('exercise_id').notNull(),
   userExerciseConfigId: uuid('user_exercise_config_id').notNull(),
 
   position: integer('position').notNull(),
