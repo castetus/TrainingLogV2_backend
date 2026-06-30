@@ -79,5 +79,5 @@ export const workouts = pgTable('workouts', {
   status: text('status', {
     enum: workoutStatuses,
   }).notNull(),
-  durationMs: integer().notNull().default(0),
+  durationMs: integer('duration_ms').notNull().default(0),
 });

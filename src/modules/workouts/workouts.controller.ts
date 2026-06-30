@@ -4,8 +4,8 @@ import { workoutService } from './workout.service';
 import type { ApiResponse } from '@/shared/types';
 
 
-export const getAllWorkouts = (req: FastifyRequest, res: FastifyReply) => {
-  const workouts = workoutService.getAllWorkouts();
+export const getAllWorkouts = async (req: FastifyRequest, res: FastifyReply) => {
+  const workouts = await workoutService.getAllWorkouts(req.user.userId);
   const response: ApiResponse<Workout[], { total: number }> = {
     data: workouts,
     meta: {

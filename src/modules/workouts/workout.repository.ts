@@ -1,10 +1,13 @@
 import { db } from "@/db/db";
 import { desc, eq, and, asc } from 'drizzle-orm';
-import { WorkoutStatus } from "./workouts.types";
+import { Workout, WorkoutStatus } from "./workouts.types";
 import { workouts } from "@/db/schema";
 
-export async function getAllWorkouts() {
-
+export async function getWorkouts(userId: string): Promise<Workout[]> {
+  return await db
+    .select()
+    .from(workouts)
+    .where(eq(workouts.userId, userId));
 };
 
 export async function findWorkoutById({ workoutId, userId }: { workoutId: string, userId: string }) {

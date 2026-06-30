@@ -2,12 +2,12 @@ import { WorkoutAction } from '@/shared/types';
 import type { Workout, CreateWorkoutRequest } from './workouts.types';
 import { WorkoutStatus } from './workouts.types';
 import crypto from 'node:crypto';
-import { findWorkoutById, updateWorkoutStatus } from './workout.repositiry';
+import { findWorkoutById, updateWorkoutStatus, getWorkouts } from './workout.repository';
 
 const workouts: Workout[] = [];
 
-const getAllWorkouts = (): Workout[] => {
-  return workouts;
+const getAllWorkouts = async (userId: string): Promise<Workout[]> => {
+  return await getWorkouts(userId);
 };
 
 const createWorkout = (data: CreateWorkoutRequest): Workout => {
