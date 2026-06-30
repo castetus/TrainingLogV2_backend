@@ -21,6 +21,9 @@ const getTrainingById = async ({ trainingId, userId }: { trainingId: string, use
     const {
       exerciseId, exerciseName, exerciseType, position
     } = item;
+    if (!acc.exercises) {
+      acc.exercises = [];
+    }
     acc.exercises.push({
       exerciseId,
       exerciseName,
@@ -52,7 +55,13 @@ const createTraining = async ({ data, userId }: { data: TrainingCreateRequest, u
 };
 
 const updateTraining = async ({ data, userId }: { data: TrainingUpdateRequest, userId: string }) => {
+  const updatedTraining = await patchTraining({ data, userId });
 
+  if (!updatedTraining) {
+    throw new Error('Can not update training');
+  }
+
+  return updateTraining;
 };
 
 const deleteTraining = async ({ trainingId, userId }: { trainingId: string; userId: string }) => {

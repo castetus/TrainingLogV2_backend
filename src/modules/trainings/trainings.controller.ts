@@ -14,7 +14,7 @@ export const getTrainingById = async (req: FastifyRequest<{ Params: { id: string
   if (!trainingDetails) {
     return res.status(404).send({ message: 'Training not found' });
   }
-  return res.send(trainingDetails);
+  return res.send({ data: trainingDetails });
 };
 
 export const createTraining = async (req: FastifyRequest<{ Body: TrainingCreateRequest }>, res: FastifyReply) => {
@@ -22,13 +22,13 @@ export const createTraining = async (req: FastifyRequest<{ Body: TrainingCreateR
   const response: ApiResponse<Training> = {
     data: newTraining,
   };
-  return res.send(response);
+  return res.send({ data: response });
 };
 
 export const updateTraining = async (req: FastifyRequest<{ Body: TrainingUpdateRequest }>, res: FastifyReply) => {
   const updatedTraining = await trainingService.updateTraining({ data: req.body, userId: req.user.userId });
 
-  return res.send(updatedTraining);
+  return res.send({ data: updatedTraining });
 };
 
 export const deleteTraining = async (req: FastifyRequest<{ Params: { id: string } }>, res: FastifyReply) => {

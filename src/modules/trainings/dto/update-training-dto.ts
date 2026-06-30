@@ -4,7 +4,8 @@ export const updateTrainingDto = {
     required: ['id'],
     properties: {
       id: {
-        type: 'uuid',
+        type: 'string',
+        format: 'uuid',
       },
       name: {
         type: 'string',

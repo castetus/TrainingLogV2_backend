@@ -1,4 +1,6 @@
 import { ExerciseType } from "@/shared/types";
+import type { FromSchema } from 'json-schema-to-ts';
+import { getTrainingDto } from "./dto/get-training.dto";
 
 type BaseUserExerciseConfig = {
   id: string;
@@ -68,3 +70,5 @@ export type TrainingDetailsResponse = {
   name: string;
   exercises: TrainingExerciseDetails[];
 }
+
+export type GetTrainingParams = FromSchema<typeof getTrainingDto.params>;

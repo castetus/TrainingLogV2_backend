@@ -7,16 +7,21 @@ import { authRoutes } from './auth/auth.routes';
 import cookie from '@fastify/cookie';
 import { authenticate } from './middleware/authenticate';
 import { trainingsRoutes } from './modules/trainings/trainings.routes';
+import { registerErrorHandler } from './hooks/registerErrorHandler';
 
-const server = fastify();
+const server = fastify({
+  logger: true,
+});
 
 await server.register(cookie);
 
 await server.register(cors, {
   origin: 'http://localhost:5173',
   credentials: true,
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
 });
+
+registerErrorHandler(server);
 
 server.register(authRoutes);
 
