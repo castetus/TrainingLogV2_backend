@@ -4,3 +4,5 @@ export type ApiResponse<TData, TMeta = undefined> = {
 };
 
 export type ExerciseType = 'weight' | 'time' | 'base';
+
+export type WorkoutAction = 'pause' | 'resume' | 'finish' | 'cancel';

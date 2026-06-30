@@ -8,10 +8,10 @@ export enum WorkoutStatus {
 export type Workout = {
   id: string;
   name: string;
-  date: string;
+  createdAt: Date;
   userId: string;
   status: WorkoutStatus;
-  continuation: number;
+  durationMs: number;
   trainingId: string;
 };
 
@@ -21,4 +21,4 @@ export type GetWorkoutByIdParams = {
 
 export type CreateWorkoutRequest = Pick<Workout, 'trainingId'>;
 
-export type UpdateWorkoutRequest = Partial<Pick<Workout, 'status' | 'continuation'>>;
+export type UpdateWorkoutRequest = Partial<Pick<Workout, 'status' | 'durationMs'>>;
