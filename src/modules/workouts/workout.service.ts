@@ -1,8 +1,10 @@
-import { WorkoutAction } from '@/shared/types';
-import type { Workout, CreateWorkoutRequest } from './workouts.types';
+import { ExerciseType, WorkoutAction } from '@/shared/types';
+import type { Workout, CreateWorkoutRequest, WorkoutDetails } from './workouts.types';
 import { WorkoutStatus } from './workouts.types';
 import crypto from 'node:crypto';
-import { findWorkoutById, updateWorkoutStatus, getWorkouts } from './workout.repository';
+import { findWorkoutById, updateWorkoutStatus, getWorkouts, insertWorkout, getWorkoutDetailRows } from './workout.repository';
+import { trainingService } from '../trainings/trainings.service';
+import { buildWorkoutDetails } from './workout.utils';
 
 const workouts: Workout[] = [];
 
@@ -10,24 +12,35 @@ const getAllWorkouts = async (userId: string): Promise<Workout[]> => {
   return await getWorkouts(userId);
 };
 
-const createWorkout = (data: CreateWorkoutRequest): Workout => {
+const createWorkout = async ({ data, userId }: { data: CreateWorkoutRequest, userId: string }) => {
+  const { trainingId, name } = data;
+  const trainingForWorkout = await trainingService.getTrainingById({ trainingId, userId });
 
-  const newWorkout: Workout = {
-    id: crypto.randomUUID(),
-    name: 'New Workout',
-    createdAt: new Date(),
-    trainingId: data.trainingId,
-    userId: 'user123',
-    status: WorkoutStatus.IN_PROGRESS,
-    durationMs: 0,
-  };
+  if (!trainingForWorkout) {
+    throw new Error('Can not find training');
+  }
 
-  workouts.unshift(newWorkout);
-  return newWorkout;
+  const result = await insertWorkout({
+    name,
+    userId,
+    training: trainingForWorkout,
+  });
+
+  return result;
 };
 
 const getWorkoutById = (id: string): Workout | undefined => {
   return workouts.find(workout => workout.id === id);
+};
+
+const getWorkoutDetails = async ({ workoutId, userId }: { workoutId: string, userId: string }): Promise<WorkoutDetails> => {
+  const rows = await getWorkoutDetailRows({ workoutId, userId });
+
+  if (!rows) {
+    throw new Error('Workout not found');
+  }
+
+  return buildWorkoutDetails(rows);
 };
 
 // const updateWorkout = (id: string, updatedWorkout: Partial<Workout>): Workout | undefined => {
@@ -132,4 +145,5 @@ export const workoutService = {
   getWorkoutById,
   transitionWorkout,
   deleteWorkout,
+  getWorkoutDetails,
 };

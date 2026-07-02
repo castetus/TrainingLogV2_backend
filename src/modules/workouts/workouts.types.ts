@@ -1,3 +1,5 @@
+import { ExerciseType } from "@/shared/types";
+
 export enum WorkoutStatus {
   IN_PROGRESS = 'in_progress',
   FINISHED = 'finished',
@@ -19,6 +21,53 @@ export type GetWorkoutByIdParams = {
   id: string;
 }
 
-export type CreateWorkoutRequest = Pick<Workout, 'trainingId'>;
+export type CreateWorkoutRequest = Pick<Workout, 'trainingId' | 'name'>;
 
 export type UpdateWorkoutRequest = Partial<Pick<Workout, 'status' | 'durationMs'>>;
+
+export type WorkoutDetailsRow = {
+  workoutId: string;
+  workoutName: string;
+  status: WorkoutStatus;
+  durationMs: number;
+  trainingId: string;
+
+  workoutExerciseResultId: string;
+  position: number;
+
+  exerciseId: string;
+  exerciseName: string;
+  exerciseType: string;
+
+  workoutSetResultId: string;
+  setNumber: number;
+  reps: number | null;
+  weightKg: number | null;
+  durationSeconds: number | null;
+  isCompleted: boolean;
+};
+
+export type WorkoutDetails = {
+  id: string;
+  name: string;
+  status: WorkoutStatus;
+  durationMs: number;
+  trainingId: string;
+  exercises: WorkoutExerciseDetails[];
+};
+
+export type WorkoutExerciseDetails = {
+  id: string;
+  exerciseId: string;
+  exerciseName: string;
+  exerciseType: ExerciseType;
+  sets: WorkoutSetDetails[];
+};
+
+export type WorkoutSetDetails = {
+  setNumber: number;
+  reps?: number;
+  weightKg?: number;
+  durationSeconds?: number;
+  isCompleted: boolean;
+};

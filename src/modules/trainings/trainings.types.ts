@@ -38,7 +38,7 @@ export type Training = {
 export type TrainingExerciseRequest = {
   exerciseId: string;
   position: number;
-  plannedSets?: number;
+  plannedSets: number;
   plannedReps?: number;
   plannedWeight?: number;
   plannedTime?: number;
@@ -53,6 +53,22 @@ export type TrainingUpdateRequest = {
   id: string;
 } & Partial<TrainingCreateRequest>;
 
+export type TrainingForWorkout = {
+  id: string;
+  name: string;
+  exercises: {
+    userExerciseConfigId: string;
+    exerciseId: string;
+    exerciseName: string;
+    exerciseType: ExerciseType;
+    position: number;
+    plannedSets: number;
+    plannedReps?: number;
+    plannedWeight?: number;
+    plannedTime?: number;
+  }[];
+};
+
 type TrainingExerciseDetails = {
   exerciseId: string;
   exerciseName: string;
@@ -60,7 +76,7 @@ type TrainingExerciseDetails = {
 
   position: number;
 
-  plannedSets?: number;
+  plannedSets: number;
   plannedReps?: number;
   plannedWeight?: number;
   plannedTime?: number;

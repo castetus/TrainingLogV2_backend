@@ -15,8 +15,12 @@ export const getAllWorkouts = async (req: FastifyRequest, res: FastifyReply) => 
   return res.send(response);
 };
 
-export const createWorkout = (req: FastifyRequest<{ Body: CreateWorkoutRequest }>, res: FastifyReply) => {
-  return res.send({ data: workoutService.createWorkout(req.body) });
+export const createWorkout = async (req: FastifyRequest<{ Body: CreateWorkoutRequest }>, res: FastifyReply) => {
+  const newWorkout = await workoutService.createWorkout({
+    data: req.body,
+    userId: req.user.userId,
+  })
+  return res.send({ data: newWorkout });
 };
 
 export const getWorkoutById = (req: FastifyRequest<{ Params: GetWorkoutByIdParams }>, res: FastifyReply) => {
@@ -33,6 +37,15 @@ export const getWorkoutById = (req: FastifyRequest<{ Params: GetWorkoutByIdParam
   }
 
   return res.send(response);
+};
+
+export const getWorkoutDetails = async (req: FastifyRequest<{ Params: GetWorkoutByIdParams }>, res: FastifyReply) => {
+  const workoutDetails = await workoutService.getWorkoutDetails({
+    workoutId: req.params.id,
+    userId: req.user.userId,
+  });
+
+  res.send({ data: workoutDetails });
 };
 
 // export const updateWorkout = (req: FastifyRequest<{ Params: GetWorkoutByIdParams, Body: UpdateWorkoutRequest }>, res: FastifyReply) => {

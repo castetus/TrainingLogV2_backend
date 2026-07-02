@@ -12,7 +12,7 @@ export async function getAllTrainings (userId: string) {
 };
 
 export async function findTrainingById ({ trainingId, userId }: { trainingId: string, userId: string }) {
-  return db
+  return await db
     .select({
       trainingId: trainings.id,
       trainingName: trainings.name,
@@ -20,6 +20,7 @@ export async function findTrainingById ({ trainingId, userId }: { trainingId: st
       exerciseId: exercises.id,
       exerciseName: exercises.name,
       exerciseType: exercises.type,
+      userExerciseConfigId: userExerciseConfigs.id,
       plannedReps: userExerciseConfigs.plannedReps,
       plannedWeight: userExerciseConfigs.plannedWeight,
       plannedSets: userExerciseConfigs.plannedSets,

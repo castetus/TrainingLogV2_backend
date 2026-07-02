@@ -1,5 +1,5 @@
 import { insertTraining, getAllTrainings, findTrainingById, patchTraining, removeTraining } from "./trainings.repository";
-import { Training, TrainingCreateRequest, TrainingDetailsResponse, TrainingUpdateRequest } from "./trainings.types";
+import { Training, TrainingCreateRequest, TrainingDetailsResponse, TrainingForWorkout, TrainingUpdateRequest } from "./trainings.types";
 
 const getTrainings = async (userId: string): Promise<Training[]> => {
   const result = await getAllTrainings(userId);
@@ -7,7 +7,7 @@ const getTrainings = async (userId: string): Promise<Training[]> => {
   return result;
 };
 
-const getTrainingById = async ({ trainingId, userId }: { trainingId: string, userId: string }): Promise<TrainingDetailsResponse | null> => {
+const getTrainingById = async ({ trainingId, userId }: { trainingId: string, userId: string }): Promise<TrainingForWorkout | null> => {
   const result = await findTrainingById({ trainingId, userId });
 
   if (!result) {
@@ -18,13 +18,17 @@ const getTrainingById = async ({ trainingId, userId }: { trainingId: string, use
     if (!acc.name) {
       acc.name = item.trainingName;
     }
+    if (!acc.id) {
+      acc.id = item.trainingId;
+    }
     const {
-      exerciseId, exerciseName, exerciseType, position
+      exerciseId, exerciseName, exerciseType, position, userExerciseConfigId
     } = item;
     if (!acc.exercises) {
       acc.exercises = [];
     }
     acc.exercises.push({
+      userExerciseConfigId,
       exerciseId,
       exerciseName,
       exerciseType,
@@ -35,7 +39,7 @@ const getTrainingById = async ({ trainingId, userId }: { trainingId: string, use
       plannedTime: item.plannedTime ?? undefined,
     });
     return acc;
-  }, {} as TrainingDetailsResponse);
+  }, {} as TrainingForWorkout);
 
   return training;
 };

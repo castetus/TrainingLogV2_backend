@@ -7,6 +7,7 @@ import {
   integer,
   boolean,
   unique,
+  numeric,
 } from 'drizzle-orm/pg-core';
 
 export const exercises = pgTable('exercises', {
@@ -42,7 +43,7 @@ export const userExerciseConfigs = pgTable('user_exercise_configs', {
   userId: uuid('user_id').notNull(),
   exerciseId: uuid('exercise_id').notNull(),
 
-  plannedSets: integer('planned_sets'),
+  plannedSets: integer('planned_sets').notNull(),
   plannedReps: integer('planned_reps'),
   plannedWeight: integer('planned_weight'),
   plannedTime: integer('planned_time'),
@@ -80,4 +81,28 @@ export const workouts = pgTable('workouts', {
     enum: workoutStatuses,
   }).notNull(),
   durationMs: integer('duration_ms').notNull().default(0),
+});
+
+export const workoutExerciseResults = pgTable('workout_exercise_results', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  workoutId: uuid('workout_id').notNull().references(() => workouts.id, {
+    onDelete: 'cascade',
+  }),
+  userExerciseConfigId: uuid('user_exercise_config_id').notNull().references(() => userExerciseConfigs.id),
+  exerciseId: uuid('exercise_id').notNull().references(() => exercises.id),
+  exerciseName: text('exercise_name').notNull(),
+  exerciseType: text('exercise_type').notNull(),
+  position: integer().notNull().default(1),
+});
+
+export const workoutSetResults = pgTable('workout_set_results', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  workoutExerciseResultId: uuid('workout_exercise_result_id').notNull().references(() => workoutExerciseResults.id, {
+    onDelete: 'cascade',
+  }),
+  isCompleted: boolean('is_completed').notNull().default(false),
+  setNumber: integer('set_number').notNull(),
+  reps: integer('reps'),
+  weightKg: numeric('weight_kg', { precision: 6, scale: 2, mode: 'number' }),
+  durationSeconds: integer('duration_seconds') 
 });

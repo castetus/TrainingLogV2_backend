@@ -8,6 +8,7 @@ import {
   resumeWorkout,
   finishWorkout,
   cancelWorkout,
+  getWorkoutDetails,
  } from './workouts.controller';
 import { createWorkoutDto } from './dto/create-workout.dto';
 import { updateWorkoutDto } from './dto/update-workout.dto';
@@ -17,6 +18,7 @@ import { getWorkoutByIdDto } from './dto/get-workout.dto';
 export function workoutRoutes (app: FastifyInstance) {
   app.get('/workouts', getAllWorkouts);
   app.get('/workouts/:id', { schema: getWorkoutByIdDto }, getWorkoutById);
+  app.get('workouts/:id/details', { schema: getWorkoutByIdDto }, getWorkoutDetails);
 
   app.post('/workouts', { schema: createWorkoutDto }, createWorkout);
 
