@@ -23,9 +23,11 @@ export const createWorkout = async (req: FastifyRequest<{ Body: CreateWorkoutReq
   return res.send({ data: newWorkout });
 };
 
-export const getWorkoutById = (req: FastifyRequest<{ Params: GetWorkoutByIdParams }>, res: FastifyReply) => {
-  const { id } = req.params;
-  const workout = workoutService.getWorkoutById(id);
+export const getWorkoutById = async (req: FastifyRequest<{ Params: GetWorkoutByIdParams }>, res: FastifyReply) => {
+  const workout = await workoutService.getWorkoutById({
+    workoutId: req.params.id,
+    userId: req.user.userId
+  });
 
 
   if (!workout) {

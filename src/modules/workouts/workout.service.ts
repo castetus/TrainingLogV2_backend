@@ -29,8 +29,8 @@ const createWorkout = async ({ data, userId }: { data: CreateWorkoutRequest, use
   return result;
 };
 
-const getWorkoutById = (id: string): Workout | undefined => {
-  return workouts.find(workout => workout.id === id);
+const getWorkoutById = ({ workoutId, userId }: { workoutId: string, userId: string }): Promise<Workout | undefined> => {
+  return findWorkoutById({ workoutId, userId });
 };
 
 const getWorkoutDetails = async ({ workoutId, userId }: { workoutId: string, userId: string }): Promise<WorkoutDetails> => {
