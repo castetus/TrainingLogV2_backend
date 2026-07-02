@@ -1,4 +1,6 @@
 import { ExerciseType } from "@/shared/types";
+import { Type, Static } from '@sinclair/typebox';
+import { WorkoutBaseResponseSchema, WorkoutListResponseSchema, WorkoutSetResultResponseSchema, WorkoutExerciseResultResponseSchema, WorkoutDetailsResponseSchema } from "./workout.schemas";
 
 export enum WorkoutStatus {
   IN_PROGRESS = 'in_progress',
@@ -71,3 +73,18 @@ export type WorkoutSetDetails = {
   durationSeconds?: number;
   isCompleted: boolean;
 };
+
+///
+
+export type WorkoutBaseResponseDto = Static<typeof WorkoutBaseResponseSchema>;
+
+export type WorkoutListResponseDto = Static<typeof WorkoutListResponseSchema>;
+
+export type WorkoutSetResultResponseDto =
+  Static<typeof WorkoutSetResultResponseSchema>;
+
+export type WorkoutExerciseResultResponseDto =
+  Static<typeof WorkoutExerciseResultResponseSchema>;
+
+export type WorkoutDetailsResponseDto =
+  Static<typeof WorkoutDetailsResponseSchema>;

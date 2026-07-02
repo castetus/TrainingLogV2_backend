@@ -10,22 +10,85 @@ import {
   cancelWorkout,
   getWorkoutDetails,
  } from './workouts.controller';
-import { createWorkoutDto } from './dto/create-workout.dto';
-import { updateWorkoutDto } from './dto/update-workout.dto';
-import { getWorkoutByIdDto } from './dto/get-workout.dto';
+import { WorkoutParamsSchema, WorkoutDetailsResponseSchema, WorkoutBaseResponseSchema, WorkoutListResponseSchema, CreateWorkoutBodySchema } from './workout.schemas';
 
 
 export function workoutRoutes (app: FastifyInstance) {
-  app.get('/workouts', getAllWorkouts);
-  app.get('/workouts/:id', { schema: getWorkoutByIdDto }, getWorkoutById);
-  app.get('/workouts/:id/details', { schema: getWorkoutByIdDto }, getWorkoutDetails);
+  app.get('/workouts', {
+    schema: {
+      params: WorkoutParamsSchema,
+      response: {
+        200: WorkoutListResponseSchema,
+      },
+    }
+  }, getAllWorkouts);
 
-  app.post('/workouts', { schema: createWorkoutDto }, createWorkout);
+  app.get('/workouts/:id', {
+    schema: {
+      params: WorkoutParamsSchema,
+      response: {
+        200: WorkoutBaseResponseSchema,
+      },
+    },
+  }, getWorkoutById);
 
-  app.post('/workouts/:id/pause', pauseWorkout);
-  app.post('/workouts/:id/resume', resumeWorkout);
-  app.post('/workouts/:id/finish', finishWorkout);
-  app.post('/workouts/:id/cancel', cancelWorkout);
+  app.get('/workouts/:id/details', {
+    schema: {
+      params: WorkoutParamsSchema,
+      response: {
+        200: WorkoutDetailsResponseSchema,
+      },
+    },
+  }, getWorkoutDetails);
 
-  app.delete('/workouts/:id', { schema: getWorkoutByIdDto }, deleteWorkout);
+  app.post('/workouts', {
+    schema: {
+      body: CreateWorkoutBodySchema,
+      response: {
+        200: WorkoutDetailsResponseSchema
+      }
+    }
+  }, createWorkout);
+
+  app.post('/workouts/:id/pause', {
+    schema: {
+      params: WorkoutParamsSchema,
+
+      response: {
+        200: WorkoutBaseResponseSchema
+      }
+    }
+  }, pauseWorkout);
+
+  app.post('/workouts/:id/resume', {
+    schema: {
+      params: WorkoutParamsSchema,
+
+      response: {
+        200: WorkoutBaseResponseSchema
+      }
+    }
+  }, resumeWorkout);
+
+  app.post('/workouts/:id/finish', {
+    schema: {
+      params: WorkoutParamsSchema,
+
+      response: {
+        200: WorkoutBaseResponseSchema
+      }
+    }
+  }, finishWorkout);
+
+  app.post('/workouts/:id/cancel', {
+    schema: {
+      params: WorkoutParamsSchema,
+
+      response: {
+        200: WorkoutBaseResponseSchema
+      }
+    }
+  }, cancelWorkout);
+
+  app.delete('/workouts/:id', { schema: { params: WorkoutParamsSchema } }, deleteWorkout);
 };
