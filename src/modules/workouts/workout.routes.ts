@@ -16,15 +16,16 @@ import { WorkoutParamsSchema, WorkoutDetailsResponseSchema, WorkoutBaseResponseS
 export function workoutRoutes (app: FastifyInstance) {
   app.get('/workouts', {
     schema: {
-      params: WorkoutParamsSchema,
+      tags: ['workouts'],
       response: {
         200: WorkoutListResponseSchema,
       },
     }
   }, getAllWorkouts);
 
-  app.get('/workouts/:id', {
+  app.get('/workouts/:workoutId', {
     schema: {
+      tags: ['workouts'],
       params: WorkoutParamsSchema,
       response: {
         200: WorkoutBaseResponseSchema,
@@ -32,8 +33,9 @@ export function workoutRoutes (app: FastifyInstance) {
     },
   }, getWorkoutById);
 
-  app.get('/workouts/:id/details', {
+  app.get('/workouts/:workoutId/details', {
     schema: {
+      tags: ['workouts'],
       params: WorkoutParamsSchema,
       response: {
         200: WorkoutDetailsResponseSchema,
@@ -43,6 +45,7 @@ export function workoutRoutes (app: FastifyInstance) {
 
   app.post('/workouts', {
     schema: {
+      tags: ['workouts'],
       body: CreateWorkoutBodySchema,
       response: {
         200: WorkoutDetailsResponseSchema
@@ -50,8 +53,9 @@ export function workoutRoutes (app: FastifyInstance) {
     }
   }, createWorkout);
 
-  app.post('/workouts/:id/pause', {
+  app.post('/workouts/:workoutId/pause', {
     schema: {
+      tags: ['workouts'],
       params: WorkoutParamsSchema,
 
       response: {
@@ -60,8 +64,9 @@ export function workoutRoutes (app: FastifyInstance) {
     }
   }, pauseWorkout);
 
-  app.post('/workouts/:id/resume', {
+  app.post('/workouts/:workoutId/resume', {
     schema: {
+      tags: ['workouts'],
       params: WorkoutParamsSchema,
 
       response: {
@@ -70,8 +75,9 @@ export function workoutRoutes (app: FastifyInstance) {
     }
   }, resumeWorkout);
 
-  app.post('/workouts/:id/finish', {
+  app.post('/workouts/:workoutId/finish', {
     schema: {
+      tags: ['workouts'],
       params: WorkoutParamsSchema,
 
       response: {
@@ -80,8 +86,9 @@ export function workoutRoutes (app: FastifyInstance) {
     }
   }, finishWorkout);
 
-  app.post('/workouts/:id/cancel', {
+  app.post('/workouts/:workoutId/cancel', {
     schema: {
+      tags: ['workouts'],
       params: WorkoutParamsSchema,
 
       response: {
@@ -90,5 +97,5 @@ export function workoutRoutes (app: FastifyInstance) {
     }
   }, cancelWorkout);
 
-  app.delete('/workouts/:id', { schema: { params: WorkoutParamsSchema } }, deleteWorkout);
+  app.delete('/workouts/:workoutId', { schema: { tags: ['workouts'], params: WorkoutParamsSchema } }, deleteWorkout);
 };

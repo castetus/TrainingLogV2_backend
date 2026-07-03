@@ -1,5 +1,5 @@
 import { insertTraining, getAllTrainings, findTrainingById, patchTraining, removeTraining } from "./trainings.repository";
-import { Training, TrainingCreateRequest, TrainingDetailsResponse, TrainingForWorkout, TrainingUpdateRequest } from "./trainings.types";
+import { Training, TrainingCreateRequest, TrainingForWorkout, TrainingUpdateRequest } from "./trainings.types";
 
 const getTrainings = async (userId: string): Promise<Training[]> => {
   const result = await getAllTrainings(userId);

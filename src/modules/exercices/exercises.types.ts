@@ -1,16 +1,18 @@
-import type { ExerciseType } from "@/shared/types";
+import type { Static } from '@sinclair/typebox';
+import {
+  ExerciseResponseSchema,
+  ExerciseListResponseSchema,
+  CreateExerciseBodySchema,
+  GetExercisesQuerySchema,
+  ExerciseParamsSchema,
+} from './exercise.schemas';
 
-export type Exercise = {
-  name: string;
-  id: string;
-  created_at: string;
-  updated_at: string;
-  description?: string;
-  type: ExerciseType;
-}
+export type Exercise = Static<typeof ExerciseResponseSchema>;
 
-export type CreateExerciseRequest = Pick<Exercise, 'name' | 'description' | 'type'>;
+export type CreateExerciseRequest = Static<typeof CreateExerciseBodySchema>;
 
-export type GetExercisesQuery = {
-  search?: string;
-};
+export type GetExercisesQuery = Static<typeof GetExercisesQuerySchema>;
+
+export type ExerciseListResponseDto = Static<typeof ExerciseListResponseSchema>;
+
+export type GetExerciseParams = Static<typeof ExerciseParamsSchema>;

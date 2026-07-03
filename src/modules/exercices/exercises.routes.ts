@@ -1,13 +1,60 @@
 import type { FastifyInstance } from 'fastify';
 
 import { getExercises, createExercise, updateExercise, deleteExercise, getExerciseById } from './exercises.controller';
-import { createExerciseDto } from './dto/create-exercise.dto';
-import { GetExercisesDTO } from './dto/get-exercises.dto';
+import {
+  ExerciseParamsSchema,
+  GetExercisesQuerySchema,
+  CreateExerciseBodySchema,
+  ExerciseListResponseSchema,
+  ExerciseResponseSchema,
+} from './exercise.schemas';
 
 export function exercisesRoutes (app: FastifyInstance) {
-  app.get('/exercises', { schema: GetExercisesDTO }, getExercises);
-  app.get('/exercises/:id', getExerciseById);
-  app.post('/exercises', { schema: createExerciseDto }, createExercise);
-  app.patch('/exercises/:id', { schema: createExerciseDto }, updateExercise);
-  app.delete('/exercises/:id', deleteExercise);
+  app.get('/exercises', {
+    schema: {
+      tags: ['exercises'],
+      querystring: GetExercisesQuerySchema,
+      response: {
+        200: ExerciseListResponseSchema,
+      },
+    },
+  }, getExercises);
+
+  app.get('/exercises/:id', {
+    schema: {
+      tags: ['exercises'],
+      params: ExerciseParamsSchema,
+      response: {
+        200: ExerciseResponseSchema,
+      },
+    },
+  }, getExerciseById);
+
+  app.post('/exercises', {
+    schema: {
+      tags: ['exercises'],
+      body: CreateExerciseBodySchema,
+      response: {
+        200: ExerciseResponseSchema,
+      },
+    },
+  }, createExercise);
+
+  app.patch('/exercises/:id', {
+    schema: {
+      tags: ['exercises'],
+      params: ExerciseParamsSchema,
+      body: CreateExerciseBodySchema,
+      response: {
+        200: ExerciseResponseSchema,
+      },
+    },
+  }, updateExercise);
+
+  app.delete('/exercises/:id', {
+    schema: {
+      tags: ['exercises'],
+      params: ExerciseParamsSchema,
+    },
+  }, deleteExercise);
 }

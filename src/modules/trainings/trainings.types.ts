@@ -1,6 +1,14 @@
-import { ExerciseType } from "@/shared/types";
-import type { FromSchema } from 'json-schema-to-ts';
-import { getTrainingDto } from "./dto/get-training.dto";
+import type { Static } from '@sinclair/typebox';
+import {
+  TrainingParamsSchema,
+  TrainingResponseSchema,
+  TrainingListResponseSchema,
+  TrainingDetailsResponseSchema,
+  TrainingExerciseForWorkoutSchema,
+  CreateTrainingBodySchema,
+  UpdateTrainingBodySchema,
+  TrainingExerciseRequestSchema,
+} from "./training.schemas";
 
 type BaseUserExerciseConfig = {
   id: string;
@@ -35,56 +43,20 @@ export type Training = {
   userId: string;
 }
 
-export type TrainingExerciseRequest = {
-  exerciseId: string;
-  position: number;
-  plannedSets: number;
-  plannedReps?: number;
-  plannedWeight?: number;
-  plannedTime?: number;
-}
+export type TrainingExerciseRequest = Static<typeof TrainingExerciseRequestSchema>;
 
-export type TrainingCreateRequest = {
-  name: string;
-  exercises: TrainingExerciseRequest[];
-}
+export type TrainingCreateRequest = Static<typeof CreateTrainingBodySchema>;
 
-export type TrainingUpdateRequest = {
-  id: string;
-} & Partial<TrainingCreateRequest>;
+export type TrainingUpdateRequest = Static<typeof UpdateTrainingBodySchema>;
 
-export type TrainingForWorkout = {
-  id: string;
-  name: string;
-  exercises: {
-    userExerciseConfigId: string;
-    exerciseId: string;
-    exerciseName: string;
-    exerciseType: ExerciseType;
-    position: number;
-    plannedSets: number;
-    plannedReps?: number;
-    plannedWeight?: number;
-    plannedTime?: number;
-  }[];
-};
+export type TrainingForWorkout = Static<typeof TrainingDetailsResponseSchema>;
 
-type TrainingExerciseDetails = {
-  exerciseId: string;
-  exerciseName: string;
-  exerciseType: ExerciseType;
+export type TrainingDetailsResponse = TrainingForWorkout;
 
-  position: number;
+export type GetTrainingParams = Static<typeof TrainingParamsSchema>;
 
-  plannedSets: number;
-  plannedReps?: number;
-  plannedWeight?: number;
-  plannedTime?: number;
-};
+export type TrainingResponseDto = Static<typeof TrainingResponseSchema>;
 
-export type TrainingDetailsResponse = {
-  name: string;
-  exercises: TrainingExerciseDetails[];
-}
+export type TrainingListResponseDto = Static<typeof TrainingListResponseSchema>;
 
-export type GetTrainingParams = FromSchema<typeof getTrainingDto.params>;
+export type TrainingExerciseForWorkoutDto = Static<typeof TrainingExerciseForWorkoutSchema>;

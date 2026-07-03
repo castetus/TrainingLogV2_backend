@@ -1,15 +1,15 @@
-import { Type, Static } from '@sinclair/typebox';
+import { Type } from '@sinclair/typebox';
 
 export const WorkoutParamsSchema = Type.Object({
   workoutId: Type.String({ format: 'uuid' }),
-});
+}, { $id: 'WorkoutParams' });
 
 export const WorkoutStatusSchema = Type.Union([
   Type.Literal('in_progress'),
   Type.Literal('paused'),
   Type.Literal('finished'),
   Type.Literal('cancelled'),
-]);
+], { $id: 'WorkoutStatus' });
 
 export const WorkoutBaseResponseSchema = Type.Object({
   id: Type.String({ format: 'uuid' }),
@@ -17,9 +17,11 @@ export const WorkoutBaseResponseSchema = Type.Object({
   workoutName: Type.String(),
   status: WorkoutStatusSchema,
   durationMs: Type.Number(),
-});
+}, { $id: 'WorkoutBaseResponse' });
 
-export const WorkoutListResponseSchema = Type.Array(WorkoutBaseResponseSchema);
+export const WorkoutListResponseSchema = Type.Array(WorkoutBaseResponseSchema, {
+  $id: 'WorkoutListResponse',
+});
 
 export const WorkoutSetResultResponseSchema = Type.Object({
   id: Type.String({ format: 'uuid' }),
@@ -28,7 +30,7 @@ export const WorkoutSetResultResponseSchema = Type.Object({
   weight: Type.Optional(Type.Number()),
   time: Type.Optional(Type.Number()),
   isCompleted: Type.Boolean(),
-});
+}, { $id: 'WorkoutSetResultResponse' });
 
 export const WorkoutExerciseResultResponseSchema = Type.Object({
   id: Type.String({ format: 'uuid' }),
@@ -37,16 +39,18 @@ export const WorkoutExerciseResultResponseSchema = Type.Object({
   exerciseName: Type.String(),
   order: Type.Number(),
   sets: Type.Array(WorkoutSetResultResponseSchema),
-});
+}, { $id: 'WorkoutExerciseResultResponse' });
 
-export const WorkoutDetailsResponseSchema = Type.Intersect([
-  WorkoutBaseResponseSchema,
-  Type.Object({
-    exercises: Type.Array(WorkoutExerciseResultResponseSchema),
-  }),
-]);
+export const WorkoutDetailsResponseSchema = Type.Object({
+  id: Type.String({ format: 'uuid' }),
+  trainingId: Type.String({ format: 'uuid' }),
+  workoutName: Type.String(),
+  status: WorkoutStatusSchema,
+  durationMs: Type.Number(),
+  exercises: Type.Array(WorkoutExerciseResultResponseSchema),
+}, { $id: 'WorkoutDetailsResponse' });
 
 export const CreateWorkoutBodySchema = Type.Object({
   name: Type.String(),
-  trainingId: Type.String({ format: 'uuid' })
-});
+  trainingId: Type.String({ format: 'uuid' }),
+}, { $id: 'CreateWorkoutBody' });

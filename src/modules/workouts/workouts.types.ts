@@ -1,5 +1,5 @@
 import { ExerciseType } from "@/shared/types";
-import { Type, Static } from '@sinclair/typebox';
+import { Static } from '@sinclair/typebox';
 import { WorkoutBaseResponseSchema, WorkoutListResponseSchema, WorkoutSetResultResponseSchema, WorkoutExerciseResultResponseSchema, WorkoutDetailsResponseSchema } from "./workout.schemas";
 
 export enum WorkoutStatus {

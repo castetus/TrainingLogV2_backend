@@ -1,29 +1,23 @@
-export type RegisterRequest = {
-  name: string;
-  email: string;
-  password: string;
-};
+import type { Static } from '@sinclair/typebox';
+import {
+  RegisterBodySchema,
+  LoginBodySchema,
+  UserResponseSchema,
+  UserWithTokenResponseSchema,
+  GoogleCallbackQuerySchema,
+} from './auth.schemas';
 
-export type LoginRequest = {
-  login: string;
-  password: string;
-};
+export type RegisterRequest = Static<typeof RegisterBodySchema>;
 
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  created_at: string;
-};
+export type LoginRequest = Static<typeof LoginBodySchema>;
+
+export type User = Static<typeof UserResponseSchema>;
 
 export type UserEntity = User & {
   password_hash: string;
 };
 
-export type UserWithToken = User & {
-  accessToken: string;
-  refreshToken: string;
-};
+export type UserWithToken = Static<typeof UserWithTokenResponseSchema>;
 
 export type JwtPayload = {
   userId: string;
@@ -38,7 +32,4 @@ export type Session = {
   expiresAt: Date;
 }
 
-export type GoogleCallbackQuery = {
-  code: string;
-  state: string;
-};
+export type GoogleCallbackQuery = Static<typeof GoogleCallbackQuerySchema>;
