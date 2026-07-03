@@ -8,6 +8,8 @@ import cookie from '@fastify/cookie';
 import { authenticate } from './middleware/authenticate';
 import { trainingsRoutes } from './modules/trainings/trainings.routes';
 import { registerErrorHandler } from './hooks/registerErrorHandler';
+import swagger from '@fastify/swagger';
+import swaggerUi from '@fastify/swagger-ui';
 
 const server = fastify({
   logger: true,
@@ -19,6 +21,19 @@ await server.register(cors, {
   origin: 'http://localhost:5173',
   credentials: true,
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+});
+
+await server.register(swagger, {
+  openapi: {
+    info: {
+      title: 'TrainingLog API',
+      version: '1.0.0',
+    },
+  },
+});
+
+await server.register(swaggerUi, {
+  routePrefix: '/docs',
 });
 
 registerErrorHandler(server);
