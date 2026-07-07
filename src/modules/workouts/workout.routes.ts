@@ -10,7 +10,7 @@ import {
   cancelWorkout,
   getWorkoutDetails,
  } from './workouts.controller';
-import { WorkoutParamsSchema, WorkoutDetailsResponseSchema, WorkoutBaseResponseSchema, WorkoutListResponseSchema, CreateWorkoutBodySchema } from './workout.schemas';
+import { WorkoutParamsSchema, WorkoutDetailsApiResponseSchema, WorkoutApiResponseSchema, WorkoutListResponseSchema, CreateWorkoutBodySchema } from './workout.schemas';
 
 
 export function workoutRoutes (app: FastifyInstance) {
@@ -28,7 +28,7 @@ export function workoutRoutes (app: FastifyInstance) {
       tags: ['workouts'],
       params: WorkoutParamsSchema,
       response: {
-        200: WorkoutBaseResponseSchema,
+        200: WorkoutApiResponseSchema,
       },
     },
   }, getWorkoutById);
@@ -38,7 +38,7 @@ export function workoutRoutes (app: FastifyInstance) {
       tags: ['workouts'],
       params: WorkoutParamsSchema,
       response: {
-        200: WorkoutDetailsResponseSchema,
+        200: WorkoutDetailsApiResponseSchema,
       },
     },
   }, getWorkoutDetails);
@@ -48,7 +48,7 @@ export function workoutRoutes (app: FastifyInstance) {
       tags: ['workouts'],
       body: CreateWorkoutBodySchema,
       response: {
-        200: WorkoutDetailsResponseSchema
+        200: WorkoutDetailsApiResponseSchema
       }
     }
   }, createWorkout);
@@ -59,7 +59,7 @@ export function workoutRoutes (app: FastifyInstance) {
       params: WorkoutParamsSchema,
 
       response: {
-        200: WorkoutBaseResponseSchema
+        200: WorkoutApiResponseSchema
       }
     }
   }, pauseWorkout);
@@ -70,7 +70,7 @@ export function workoutRoutes (app: FastifyInstance) {
       params: WorkoutParamsSchema,
 
       response: {
-        200: WorkoutBaseResponseSchema
+        200: WorkoutApiResponseSchema
       }
     }
   }, resumeWorkout);
@@ -81,7 +81,7 @@ export function workoutRoutes (app: FastifyInstance) {
       params: WorkoutParamsSchema,
 
       response: {
-        200: WorkoutBaseResponseSchema
+        200: WorkoutApiResponseSchema
       }
     }
   }, finishWorkout);
@@ -92,7 +92,7 @@ export function workoutRoutes (app: FastifyInstance) {
       params: WorkoutParamsSchema,
 
       response: {
-        200: WorkoutBaseResponseSchema
+        200: WorkoutApiResponseSchema
       }
     }
   }, cancelWorkout);

@@ -31,8 +31,8 @@ export const register = async (req: FastifyRequest<{ Body: RegisterRequest }>, r
 };
 
 export const login = async (req: FastifyRequest<{ Body: LoginRequest }>, res: FastifyReply) => {
-  const { login, password } = req.body;
-  const user = await authService.login({ login, password });
+  const { email, password } = req.body;
+  const user = await authService.login({ email, password });
   if (!user) {
     return res.status(401).send({ message: 'Invalid email or password' });
   }
@@ -44,7 +44,12 @@ export const login = async (req: FastifyRequest<{ Body: LoginRequest }>, res: Fa
   
   return res.send({
     data: {
-      user,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        created_at: user.created_at,
+      }
     },
   });
 };

@@ -9,7 +9,9 @@ import { buildWorkoutDetails } from './workout.utils';
 const workouts: Workout[] = [];
 
 const getAllWorkouts = async (userId: string): Promise<Workout[]> => {
-  return await getWorkouts(userId);
+  const res = await getWorkouts(userId);
+  console.log('Workouts:', res)
+  return res;
 };
 
 const createWorkout = async ({ data, userId }: { data: CreateWorkoutRequest, userId: string }) => {

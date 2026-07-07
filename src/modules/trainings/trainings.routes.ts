@@ -12,8 +12,8 @@ import {
   CreateTrainingBodySchema,
   UpdateTrainingBodySchema,
   TrainingListResponseSchema,
-  TrainingDetailsResponseSchema,
-  TrainingResponseSchema,
+  TrainingDetailsApiResponseSchema,
+  TrainingApiResponseSchema,
 } from './training.schemas';
 
 export function trainingsRoutes (app: FastifyInstance) {
@@ -31,7 +31,7 @@ export function trainingsRoutes (app: FastifyInstance) {
       tags: ['trainings'],
       params: TrainingParamsSchema,
       response: {
-        200: TrainingDetailsResponseSchema,
+        200: TrainingDetailsApiResponseSchema,
       },
     },
   }, getTrainingById);
@@ -41,7 +41,7 @@ export function trainingsRoutes (app: FastifyInstance) {
       tags: ['trainings'],
       body: CreateTrainingBodySchema,
       response: {
-        200: TrainingResponseSchema,
+        200: TrainingApiResponseSchema,
       },
     },
   }, createTraining);
@@ -51,6 +51,9 @@ export function trainingsRoutes (app: FastifyInstance) {
       tags: ['trainings'],
       params: TrainingParamsSchema,
       body: UpdateTrainingBodySchema,
+      response: {
+        200: TrainingApiResponseSchema,
+      },
     },
   }, updateTraining);
 

@@ -1,4 +1,5 @@
 import { Type } from '@sinclair/typebox';
+import { createApiResponseSchema } from '@/shared/schemas';
 
 export const ExerciseTypeSchema = Type.Union([
   Type.Literal('weight'),
@@ -36,10 +37,6 @@ export const TrainingResponseSchema = Type.Object({
   userId: Type.String({ format: 'uuid' }),
 }, { $id: 'TrainingResponse' });
 
-export const TrainingListResponseSchema = Type.Array(TrainingResponseSchema, {
-  $id: 'TrainingListResponse',
-});
-
 export const TrainingExerciseForWorkoutSchema = Type.Object({
   userExerciseConfigId: Type.String({ format: 'uuid' }),
   exerciseId: Type.String({ format: 'uuid' }),
@@ -57,3 +54,18 @@ export const TrainingDetailsResponseSchema = Type.Object({
   name: Type.String(),
   exercises: Type.Array(TrainingExerciseForWorkoutSchema),
 }, { $id: 'TrainingDetailsResponse' });
+
+export const TrainingListResponseSchema = createApiResponseSchema(
+  Type.Array(TrainingResponseSchema),
+  { $id: 'TrainingListResponse' },
+);
+
+export const TrainingDetailsApiResponseSchema = createApiResponseSchema(
+  TrainingDetailsResponseSchema,
+  { $id: 'TrainingDetailsApiResponse' },
+);
+
+export const TrainingApiResponseSchema = createApiResponseSchema(
+  TrainingResponseSchema,
+  { $id: 'TrainingApiResponse' },
+);

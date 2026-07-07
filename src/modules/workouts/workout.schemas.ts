@@ -1,4 +1,5 @@
 import { Type } from '@sinclair/typebox';
+import { createApiResponseSchema } from '@/shared/schemas';
 
 export const WorkoutParamsSchema = Type.Object({
   workoutId: Type.String({ format: 'uuid' }),
@@ -14,14 +15,10 @@ export const WorkoutStatusSchema = Type.Union([
 export const WorkoutBaseResponseSchema = Type.Object({
   id: Type.String({ format: 'uuid' }),
   trainingId: Type.String({ format: 'uuid' }),
-  workoutName: Type.String(),
+  name: Type.String(),
   status: WorkoutStatusSchema,
   durationMs: Type.Number(),
 }, { $id: 'WorkoutBaseResponse' });
-
-export const WorkoutListResponseSchema = Type.Array(WorkoutBaseResponseSchema, {
-  $id: 'WorkoutListResponse',
-});
 
 export const WorkoutSetResultResponseSchema = Type.Object({
   id: Type.String({ format: 'uuid' }),
@@ -49,6 +46,25 @@ export const WorkoutDetailsResponseSchema = Type.Object({
   durationMs: Type.Number(),
   exercises: Type.Array(WorkoutExerciseResultResponseSchema),
 }, { $id: 'WorkoutDetailsResponse' });
+
+export const WorkoutListMetaSchema = Type.Object({
+  total: Type.Number(),
+}, { $id: 'WorkoutListMeta' });
+
+export const WorkoutListResponseSchema = createApiResponseSchema(
+  Type.Array(WorkoutBaseResponseSchema),
+  { $id: 'WorkoutListResponse', meta: WorkoutListMetaSchema },
+);
+
+export const WorkoutApiResponseSchema = createApiResponseSchema(
+  WorkoutBaseResponseSchema,
+  { $id: 'WorkoutApiResponse' },
+);
+
+export const WorkoutDetailsApiResponseSchema = createApiResponseSchema(
+  WorkoutDetailsResponseSchema,
+  { $id: 'WorkoutDetailsApiResponse' },
+);
 
 export const CreateWorkoutBodySchema = Type.Object({
   name: Type.String(),

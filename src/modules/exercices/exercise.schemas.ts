@@ -1,4 +1,5 @@
 import { Type } from '@sinclair/typebox';
+import { createApiResponseSchema } from '@/shared/schemas';
 
 export const ExerciseTypeSchema = Type.Union([
   Type.Literal('weight'),
@@ -29,6 +30,12 @@ export const ExerciseResponseSchema = Type.Object({
   type: ExerciseTypeSchema,
 }, { $id: 'ExerciseResponse' });
 
-export const ExerciseListResponseSchema = Type.Array(ExerciseResponseSchema, {
-  $id: 'ExerciseListResponse',
-});
+export const ExerciseListResponseSchema = createApiResponseSchema(
+  Type.Array(ExerciseResponseSchema),
+  { $id: 'ExerciseListResponse' },
+);
+
+export const ExerciseApiResponseSchema = createApiResponseSchema(
+  ExerciseResponseSchema,
+  { $id: 'ExerciseApiResponse' },
+);

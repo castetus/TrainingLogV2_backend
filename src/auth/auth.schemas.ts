@@ -1,4 +1,5 @@
 import { Type } from '@sinclair/typebox';
+import { createApiResponseSchema } from '@/shared/schemas';
 
 export const RegisterBodySchema = Type.Object({
   name: Type.String({ minLength: 1 }),
@@ -7,7 +8,7 @@ export const RegisterBodySchema = Type.Object({
 }, { $id: 'RegisterBody' });
 
 export const LoginBodySchema = Type.Object({
-  login: Type.String({ format: 'email' }),
+  email: Type.String({ format: 'email' }),
   password: Type.String({ minLength: 4 }),
 }, { $id: 'LoginBody' });
 
@@ -27,19 +28,22 @@ export const UserWithTokenResponseSchema = Type.Object({
   refreshToken: Type.String(),
 }, { $id: 'UserWithTokenResponse' });
 
-export const LoginResponseSchema = Type.Object({
-  data: Type.Object({
-    user: UserWithTokenResponseSchema,
+export const LoginResponseSchema = createApiResponseSchema(
+  Type.Object({
+    user: UserResponseSchema,
   }, { $id: 'LoginResponseData' }),
-}, { $id: 'LoginResponse' });
+  { $id: 'LoginResponse' },
+);
 
-export const RegisterResponseSchema = Type.Object({
-  data: UserWithTokenResponseSchema,
-}, { $id: 'RegisterResponse' });
+export const RegisterResponseSchema = createApiResponseSchema(
+  UserWithTokenResponseSchema,
+  { $id: 'RegisterResponse' },
+);
 
-export const CurrentUserResponseSchema = Type.Object({
-  data: UserResponseSchema,
-}, { $id: 'CurrentUserResponse' });
+export const CurrentUserResponseSchema = createApiResponseSchema(
+  UserResponseSchema,
+  { $id: 'CurrentUserResponse' },
+);
 
 export const GoogleCallbackQuerySchema = Type.Object({
   code: Type.String(),

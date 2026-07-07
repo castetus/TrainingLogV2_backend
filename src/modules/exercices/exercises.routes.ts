@@ -6,7 +6,7 @@ import {
   GetExercisesQuerySchema,
   CreateExerciseBodySchema,
   ExerciseListResponseSchema,
-  ExerciseResponseSchema,
+  ExerciseApiResponseSchema,
 } from './exercise.schemas';
 
 export function exercisesRoutes (app: FastifyInstance) {
@@ -25,7 +25,7 @@ export function exercisesRoutes (app: FastifyInstance) {
       tags: ['exercises'],
       params: ExerciseParamsSchema,
       response: {
-        200: ExerciseResponseSchema,
+        200: ExerciseApiResponseSchema,
       },
     },
   }, getExerciseById);
@@ -35,7 +35,7 @@ export function exercisesRoutes (app: FastifyInstance) {
       tags: ['exercises'],
       body: CreateExerciseBodySchema,
       response: {
-        200: ExerciseResponseSchema,
+        200: ExerciseApiResponseSchema,
       },
     },
   }, createExercise);
@@ -46,7 +46,7 @@ export function exercisesRoutes (app: FastifyInstance) {
       params: ExerciseParamsSchema,
       body: CreateExerciseBodySchema,
       response: {
-        200: ExerciseResponseSchema,
+        200: ExerciseApiResponseSchema,
       },
     },
   }, updateExercise);

@@ -51,8 +51,8 @@ const register = async (data: {name: string, email: string, password: string }):
   };
 };
 
-const login = async (data: { login: string, password: string }): Promise<UserWithToken | null> => {
-  const user = await findUserByEmail(data.login);
+const login = async (data: { email: string, password: string }): Promise<UserWithToken | null> => {
+  const user = await findUserByEmail(data.email);
   if (!user) {
     return null;
   }

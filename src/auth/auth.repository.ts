@@ -22,19 +22,20 @@ export async function insertUser(name: string, email: string, passwordHash: stri
   return result.rows[0];
 };
 
-export async function findUserByEmail(login: string): Promise<UserEntity | null> {
+export async function findUserByEmail(email: string): Promise<UserEntity | null> {
   const result = await pool.query(
     `
     SELECT
       id,
       name,
-      login,
+      login AS email,
       created_at
     FROM users
     WHERE login = $1;
     `,
-    [login],
+    [email],
   );
+  
   return result.rows[0] || null;
 };
 
@@ -56,7 +57,7 @@ export async function findUserById(userId: string): Promise<User | null> {
     SELECT
       id,
       name,
-      login,
+      login AS email,
       created_at
     FROM users
     WHERE id = $1;
