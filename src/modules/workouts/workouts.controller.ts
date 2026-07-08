@@ -20,12 +20,13 @@ export const createWorkout = async (req: FastifyRequest<{ Body: CreateWorkoutReq
     data: req.body,
     userId: req.user.userId,
   })
+
   return res.send({ data: newWorkout });
 };
 
 export const getWorkoutById = async (req: FastifyRequest<{ Params: GetWorkoutByIdParams }>, res: FastifyReply) => {
   const workout = await workoutService.getWorkoutById({
-    workoutId: req.params.id,
+    workoutId: req.params.workoutId,
     userId: req.user.userId
   });
 
@@ -43,9 +44,15 @@ export const getWorkoutById = async (req: FastifyRequest<{ Params: GetWorkoutByI
 
 export const getWorkoutDetails = async (req: FastifyRequest<{ Params: GetWorkoutByIdParams }>, res: FastifyReply) => {
   const workoutDetails = await workoutService.getWorkoutDetails({
-    workoutId: req.params.id,
+    workoutId: req.params.workoutId,
     userId: req.user.userId,
   });
+
+  console.log('RES', workoutDetails)
+
+  if (!workoutDetails) {
+    res.status(404).send('Workout not found');
+  }
 
   res.send({ data: workoutDetails });
 };
@@ -67,7 +74,7 @@ export const getWorkoutDetails = async (req: FastifyRequest<{ Params: GetWorkout
 
 export const pauseWorkout = async (req: FastifyRequest<{ Params: GetWorkoutByIdParams, Body: { durationMs?: number } }>, res: FastifyReply) => {
   const result = await workoutService.transitionWorkout({
-    workoutId: req.params.id,
+    workoutId: req.params.workoutId,
     userId: req.user.userId,
     action: 'pause',
     durationMs: req.body.durationMs,
@@ -78,7 +85,7 @@ export const pauseWorkout = async (req: FastifyRequest<{ Params: GetWorkoutByIdP
 
 export const resumeWorkout = async (req: FastifyRequest<{ Params: GetWorkoutByIdParams, Body: { durationMs?: number } }>, res: FastifyReply) => {
   await workoutService.transitionWorkout({
-    workoutId: req.params.id,
+    workoutId: req.params.workoutId,
     userId: req.user.userId,
     action: 'resume',
     durationMs: req.body.durationMs,
@@ -89,7 +96,7 @@ export const resumeWorkout = async (req: FastifyRequest<{ Params: GetWorkoutById
 
 export const finishWorkout = async (req: FastifyRequest<{ Params: GetWorkoutByIdParams, Body: { durationMs?: number } }>, res: FastifyReply) => {
   await workoutService.transitionWorkout({
-    workoutId: req.params.id,
+    workoutId: req.params.workoutId,
     userId: req.user.userId,
     action: 'finish',
     durationMs: req.body.durationMs,
@@ -100,7 +107,7 @@ export const finishWorkout = async (req: FastifyRequest<{ Params: GetWorkoutById
 
 export const cancelWorkout = async (req: FastifyRequest<{ Params: GetWorkoutByIdParams, Body: { durationMs?: number } }>, res: FastifyReply) => {
   await workoutService.transitionWorkout({
-    workoutId: req.params.id,
+    workoutId: req.params.workoutId,
     userId: req.user.userId,
     action: 'cancel',
     durationMs: req.body.durationMs,
@@ -111,8 +118,8 @@ export const cancelWorkout = async (req: FastifyRequest<{ Params: GetWorkoutById
 
 
 export const deleteWorkout = (req: FastifyRequest<{ Params: GetWorkoutByIdParams }>, res: FastifyReply) => {
-  const { id } = req.params;
-  const success = workoutService.deleteWorkout(id);
+  const { workoutId } = req.params;
+  const success = workoutService.deleteWorkout(workoutId);
 
   if (!success) {
     return res.status(404).send({ data: 'Workout not found' });

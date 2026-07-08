@@ -34,14 +34,14 @@ export const WorkoutExerciseResultResponseSchema = Type.Object({
   userExerciseConfigId: Type.String({ format: 'uuid' }),
   exerciseId: Type.String({ format: 'uuid' }),
   exerciseName: Type.String(),
-  order: Type.Number(),
+  position: Type.Number(),
   sets: Type.Array(WorkoutSetResultResponseSchema),
 }, { $id: 'WorkoutExerciseResultResponse' });
 
 export const WorkoutDetailsResponseSchema = Type.Object({
   id: Type.String({ format: 'uuid' }),
   trainingId: Type.String({ format: 'uuid' }),
-  workoutName: Type.String(),
+  name: Type.String(),
   status: WorkoutStatusSchema,
   durationMs: Type.Number(),
   exercises: Type.Array(WorkoutExerciseResultResponseSchema),

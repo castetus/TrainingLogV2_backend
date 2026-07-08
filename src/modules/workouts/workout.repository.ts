@@ -17,7 +17,8 @@ export async function findWorkoutById({ workoutId, userId }: { workoutId: string
   return workout;
 };
 
-export async function getWorkoutDetailRows({ workoutId, userId }: { workoutId: string, userId: string }):       Promise<WorkoutDetailsRow[]> {
+export async function getWorkoutDetailRows({ workoutId, userId }: { workoutId: string, userId: string }): Promise<WorkoutDetailsRow[]> {
+  console.log('REP', workoutId, userId)
   return await db
     .select({
       workoutId: workouts.id,
@@ -27,6 +28,7 @@ export async function getWorkoutDetailRows({ workoutId, userId }: { workoutId: s
       workoutName: workouts.name,
 
       workoutExerciseResultId: workoutExerciseResults.id,
+      userExerciseConfigId: workoutExerciseResults.userExerciseConfigId,
       exerciseId: workoutExerciseResults.exerciseId,
       exerciseName: workoutExerciseResults.exerciseName,
       exerciseType: workoutExerciseResults.exerciseType,

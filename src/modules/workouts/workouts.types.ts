@@ -20,7 +20,7 @@ export type Workout = {
 };
 
 export type GetWorkoutByIdParams = {
-  id: string;
+  workoutId: string;
 }
 
 export type CreateWorkoutRequest = Pick<Workout, 'trainingId' | 'name'>;
@@ -34,6 +34,7 @@ export type WorkoutDetailsRow = {
   durationMs: number;
   trainingId: string;
 
+  userExerciseConfigId: string;
   workoutExerciseResultId: string;
   position: number;
 
@@ -63,10 +64,13 @@ export type WorkoutExerciseDetails = {
   exerciseId: string;
   exerciseName: string;
   exerciseType: ExerciseType;
+  userExerciseConfigId: string;
+  position: number;
   sets: WorkoutSetDetails[];
 };
 
 export type WorkoutSetDetails = {
+  id: string;
   setNumber: number;
   reps?: number;
   weightKg?: number;

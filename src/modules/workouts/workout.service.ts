@@ -9,9 +9,7 @@ import { buildWorkoutDetails } from './workout.utils';
 const workouts: Workout[] = [];
 
 const getAllWorkouts = async (userId: string): Promise<Workout[]> => {
-  const res = await getWorkouts(userId);
-  console.log('Workouts:', res)
-  return res;
+  return await getWorkouts(userId);
 };
 
 const createWorkout = async ({ data, userId }: { data: CreateWorkoutRequest, userId: string }) => {
@@ -38,9 +36,11 @@ const getWorkoutById = ({ workoutId, userId }: { workoutId: string, userId: stri
 const getWorkoutDetails = async ({ workoutId, userId }: { workoutId: string, userId: string }): Promise<WorkoutDetails> => {
   const rows = await getWorkoutDetailRows({ workoutId, userId });
 
-  if (!rows) {
+  if (!rows || !rows.length) {
     throw new Error('Workout not found');
   }
+
+  console.log('ROWS', rows)
 
   return buildWorkoutDetails(rows);
 };

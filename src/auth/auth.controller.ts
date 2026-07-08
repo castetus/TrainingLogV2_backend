@@ -74,6 +74,7 @@ export const checkRefreshToken = async (req: FastifyRequest, res: FastifyReply) 
 };
 
 export const redirectToGoogle = async (req: FastifyRequest, res: FastifyReply) => {
+  
   const url = new URL(
     'https://accounts.google.com/o/oauth2/v2/auth'
   );
@@ -97,6 +98,18 @@ export const redirectToGoogle = async (req: FastifyRequest, res: FastifyReply) =
     'scope',
     'openid email profile',
   );
+
+  const state = crypto.randomUUID();
+
+  url.searchParams.set('state', state);
+
+  res.setCookie('google_oauth_state', state, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: false,
+    path: '/auth/google/callback',
+    maxAge: 60 * 5,
+  });
 
   return res.redirect(url.toString());
 };
@@ -132,6 +145,16 @@ export const googleCallback = async (req: FastifyRequest<{
   );
 
   const { code, state } = req.query;
+
+  const savedState = req.cookies.google_oauth_state;
+
+  if (!state || !savedState || state !== savedState) {
+    return sendGoogleAuthResult(res, GOOGLE_AUTH_ERROR, 'Invalid OAuth state');
+  }
+
+  res.clearCookie('google_oauth_state', {
+    path: '/auth/google/callback',
+  });
 
   if (!code) {
     return res.code(400).send({ message: 'Missing code' });

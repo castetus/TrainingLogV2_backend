@@ -10,7 +10,7 @@ import {
   cancelWorkout,
   getWorkoutDetails,
  } from './workouts.controller';
-import { WorkoutParamsSchema, WorkoutDetailsApiResponseSchema, WorkoutApiResponseSchema, WorkoutListResponseSchema, CreateWorkoutBodySchema } from './workout.schemas';
+import { WorkoutParamsSchema, WorkoutDetailsApiResponseSchema, WorkoutApiResponseSchema, WorkoutListResponseSchema, CreateWorkoutBodySchema, WorkoutBaseResponseSchema } from './workout.schemas';
 
 
 export function workoutRoutes (app: FastifyInstance) {
@@ -48,7 +48,7 @@ export function workoutRoutes (app: FastifyInstance) {
       tags: ['workouts'],
       body: CreateWorkoutBodySchema,
       response: {
-        200: WorkoutDetailsApiResponseSchema
+        200: WorkoutApiResponseSchema,
       }
     }
   }, createWorkout);

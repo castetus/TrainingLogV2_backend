@@ -3,6 +3,7 @@ import { WorkoutDetailsRow, WorkoutDetails, WorkoutExerciseDetails, WorkoutSetDe
 
 const buildWorkoutSet = (row: WorkoutDetailsRow): WorkoutSetDetails => {
   return {
+    id: row.workoutSetResultId,
     setNumber: row.setNumber,
     reps: row.reps ?? undefined,
     weightKg: row.weightKg ?? undefined,
@@ -32,6 +33,8 @@ const buildWorkoutExercises = (rows: WorkoutDetailsRow[]): WorkoutExerciseDetail
         exerciseId: row.exerciseId,
         exerciseName: row.exerciseName,
         exerciseType: row.exerciseType as ExerciseType,
+        userExerciseConfigId: row.userExerciseConfigId,
+        position: row.position,
         sets: [buildWorkoutSet(row)],
       });
     }
@@ -43,6 +46,8 @@ const buildWorkoutExercises = (rows: WorkoutDetailsRow[]): WorkoutExerciseDetail
 export const buildWorkoutDetails = (
   rows: WorkoutDetailsRow[]
 ): WorkoutDetails => {
+
+  console.log('ROWS:', rows)
 
   const firstRow = rows[0];
 
