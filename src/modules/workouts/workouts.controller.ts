@@ -48,8 +48,6 @@ export const getWorkoutDetails = async (req: FastifyRequest<{ Params: GetWorkout
     userId: req.user.userId,
   });
 
-  console.log('RES', workoutDetails)
-
   if (!workoutDetails) {
     res.status(404).send('Workout not found');
   }

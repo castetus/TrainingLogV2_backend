@@ -1,11 +1,6 @@
 import { Type } from '@sinclair/typebox';
 import { createApiResponseSchema } from '@/shared/schemas';
-
-export const ExerciseTypeSchema = Type.Union([
-  Type.Literal('weight'),
-  Type.Literal('time'),
-  Type.Literal('base'),
-], { $id: 'ExerciseType' });
+import { ExerciseTypeSchema } from '../exercices/exercise.schemas';
 
 export const TrainingParamsSchema = Type.Object({
   id: Type.String({ format: 'uuid' }),

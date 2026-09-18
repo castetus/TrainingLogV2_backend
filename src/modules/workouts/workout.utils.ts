@@ -35,6 +35,9 @@ const buildWorkoutExercises = (rows: WorkoutDetailsRow[]): WorkoutExerciseDetail
         exerciseType: row.exerciseType as ExerciseType,
         userExerciseConfigId: row.userExerciseConfigId,
         position: row.position,
+        plannedReps: row.reps ?? undefined,
+        plannedWeight: row.weightKg ?? undefined,
+        plannedTime: row.durationSeconds ?? undefined,
         sets: [buildWorkoutSet(row)],
       });
     }
@@ -46,8 +49,6 @@ const buildWorkoutExercises = (rows: WorkoutDetailsRow[]): WorkoutExerciseDetail
 export const buildWorkoutDetails = (
   rows: WorkoutDetailsRow[]
 ): WorkoutDetails => {
-
-  console.log('ROWS:', rows)
 
   const firstRow = rows[0];
 

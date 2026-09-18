@@ -1,5 +1,6 @@
 import { Type } from '@sinclair/typebox';
 import { createApiResponseSchema } from '@/shared/schemas';
+import { ExerciseTypeSchema } from '../exercices/exercise.schemas';
 
 export const WorkoutParamsSchema = Type.Object({
   workoutId: Type.String({ format: 'uuid' }),
@@ -24,8 +25,8 @@ export const WorkoutSetResultResponseSchema = Type.Object({
   id: Type.String({ format: 'uuid' }),
   setNumber: Type.Number(),
   reps: Type.Optional(Type.Number()),
-  weight: Type.Optional(Type.Number()),
-  time: Type.Optional(Type.Number()),
+  weightKg: Type.Optional(Type.Number()),
+  durationSeconds: Type.Optional(Type.Number()),
   isCompleted: Type.Boolean(),
 }, { $id: 'WorkoutSetResultResponse' });
 
@@ -34,6 +35,10 @@ export const WorkoutExerciseResultResponseSchema = Type.Object({
   userExerciseConfigId: Type.String({ format: 'uuid' }),
   exerciseId: Type.String({ format: 'uuid' }),
   exerciseName: Type.String(),
+  exerciseType: ExerciseTypeSchema,
+  plannedWeight: Type.Optional(Type.Number()),
+  plannedTime: Type.Optional(Type.Number()),
+  plannedReps: Type.Optional(Type.Number()),
   position: Type.Number(),
   sets: Type.Array(WorkoutSetResultResponseSchema),
 }, { $id: 'WorkoutExerciseResultResponse' });

@@ -40,8 +40,6 @@ const getWorkoutDetails = async ({ workoutId, userId }: { workoutId: string, use
     throw new Error('Workout not found');
   }
 
-  console.log('ROWS', rows)
-
   return buildWorkoutDetails(rows);
 };
 

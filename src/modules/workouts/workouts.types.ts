@@ -66,6 +66,9 @@ export type WorkoutExerciseDetails = {
   exerciseType: ExerciseType;
   userExerciseConfigId: string;
   position: number;
+  plannedReps?: number;
+  plannedWeight?: number;
+  plannedTime?: number;
   sets: WorkoutSetDetails[];
 };
 
