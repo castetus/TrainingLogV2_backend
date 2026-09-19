@@ -8,6 +8,7 @@ function isDbError(error: unknown): error is {
   table?: string;
   column?: string;
   cause?: unknown;
+  validation?: unknown;
 } {
   return typeof error === 'object' && error !== null;
 }
@@ -21,7 +22,7 @@ export function registerErrorHandler(app: FastifyInstance) {
       userId: req.user?.userId,
     });
 
-    if (error.validation) {
+    if (isDbError(error) && error.validation) {
       return res.status(400).send({
         message: 'Validation error',
         details: error.validation,
