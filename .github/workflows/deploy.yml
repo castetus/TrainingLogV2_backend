@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Show commit
-        run: echo "Building commit ${{ github.sha }}"
+      - name: Build Docker image
+        run: docker build -t traininglog-backend:${{ github.sha }} .
