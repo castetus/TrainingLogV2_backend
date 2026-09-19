@@ -119,7 +119,7 @@ export async function patchTraining ({ data, userId }: { data: TrainingUpdateReq
           [config] = await tx
             .update(userExerciseConfigs)
             .set({
-              plannedSets: item.plannedSets ?? null,
+              plannedSets: item.plannedSets,
               plannedReps: item.plannedReps ?? null,
               plannedWeight: item.plannedWeight ?? null,
               plannedTime: item.plannedTime ?? null,

@@ -9,7 +9,7 @@ export const TrainingParamsSchema = Type.Object({
 export const TrainingExerciseRequestSchema = Type.Object({
   exerciseId: Type.String(),
   position: Type.Number(),
-  plannedSets: Type.Optional(Type.Number()),
+  plannedSets: Type.Integer({ minimum: 1 }),
   plannedReps: Type.Optional(Type.Number()),
   plannedWeight: Type.Optional(Type.Number()),
   plannedTime: Type.Optional(Type.Number()),
