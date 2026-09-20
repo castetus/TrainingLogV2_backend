@@ -148,6 +148,16 @@ export const googleCallback = async (req: FastifyRequest<{
 
   const savedState = req.cookies.google_oauth_state;
 
+  req.log.info(
+  {
+    state,
+    savedState,
+    hasCode: Boolean(code),
+    frontendUrl: process.env.FRONTEND_URL,
+  },
+  'Google OAuth callback debug',
+);
+
   if (!state || !savedState || state !== savedState) {
     return sendGoogleAuthResult(res, GOOGLE_AUTH_ERROR, 'Invalid OAuth state');
   }
@@ -177,6 +187,8 @@ export const googleCallback = async (req: FastifyRequest<{
     });
 
     setAuthCookies(res, user.accessToken, user.refreshToken);
+
+    req.log.info('Google OAuth success');
 
     return sendGoogleAuthResult(res, GOOGLE_AUTH_SUCCESS);
   }
