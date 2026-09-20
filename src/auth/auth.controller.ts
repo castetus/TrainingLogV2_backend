@@ -106,8 +106,8 @@ export const redirectToGoogle = async (req: FastifyRequest, res: FastifyReply) =
   res.setCookie('google_oauth_state', state, {
     httpOnly: true,
     sameSite: 'lax',
-    secure: false,
-    path: '/auth/google/callback',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/api/auth/google/callback',
     maxAge: 60 * 5,
   });
 
@@ -153,7 +153,7 @@ export const googleCallback = async (req: FastifyRequest<{
   }
 
   res.clearCookie('google_oauth_state', {
-    path: '/auth/google/callback',
+    path: '/api/auth/google/callback',
   });
 
   if (!code) {
