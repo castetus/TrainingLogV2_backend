@@ -19,15 +19,20 @@ export const getCurrentUser = async (req: FastifyRequest, res: FastifyReply) => 
 export const register = async (req: FastifyRequest<{ Body: RegisterRequest }>, res: FastifyReply) => {
   const { name, email, password } = req.body;
   const newUser = await authService.register({ name, email, password });
+
   if (!newUser) {
     return res.status(409).send({ message: 'User with this email already exists' });
   }
+
+  const { accessToken, refreshToken, ...user } = newUser;
+
   setAuthCookies(
     res,
     newUser.accessToken,
     newUser.refreshToken,
   );
-  return res.send({ data: newUser });
+
+  return res.send({ data: user });
 };
 
 export const login = async (req: FastifyRequest<{ Body: LoginRequest }>, res: FastifyReply) => {

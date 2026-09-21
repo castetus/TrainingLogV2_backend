@@ -2,7 +2,7 @@ import { pool } from '@/db/pool';
 import { Session, User, UserEntity } from './auth.types';
 
 export async function insertUser(name: string, email: string, passwordHash: string): Promise<User> {
-  const result = await pool.query(
+  const result = await pool.query<User>(
     `
     INSERT INTO users (
       name,
@@ -13,7 +13,7 @@ export async function insertUser(name: string, email: string, passwordHash: stri
     RETURNING
       id,
       name,
-      login,
+      login AS email,
       created_at;
     `,
     [name, email, passwordHash],
